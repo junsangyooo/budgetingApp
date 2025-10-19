@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:budgeting/db/database.dart';
 import 'package:budgeting/repositories/transaction_repository.dart';
 import 'package:budgeting/viewmodels/home_view_model.dart';
 import 'package:budgeting/viewmodels/summary_view_model.dart';
 import 'package:budgeting/screens/home_screen.dart';
 import 'package:budgeting/screens/summary_screen.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

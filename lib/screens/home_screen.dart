@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:budgeting/models/transaction.dart';
 
-class Transactions extends StatefulWidget{
+class HomeScreen extends StatefulWidget{
   const Transactions ({super.key});
 
   @override
