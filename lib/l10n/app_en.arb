@@ -1,0 +1,39 @@
+{
+  "welcomeTitle": "Welcome to Budget Tracker",
+  "chooseLanguage": "Choose your preferred language",
+  "confirm": "Confirm",
+  "createFirstAccount": "Create Your First Account",
+  "setupAccountDesc": "Set up at least one account to get started",
+  "accountName": "Account Name",
+  "accountNameHint": "e.g., My Checking Account",
+  "currency": "Currency",
+  "initialBalance": "Initial Balance",
+  "finishSetup": "Finish Setup",
+  "youCanAddMore": "You can add more currencies and accounts later in Settings",
+  "english": "English",
+  "korean": "한국어",
+  "defaultCurrencyUSD": "Default currency: USD",
+  "defaultCurrencyKRW": "Default currency: KRW",
+  "pleaseSelectLanguage": "Please select a language",
+  "pleaseEnterAccountName": "Please enter an account name",
+  "pleaseEnterBalance": "Please enter initial balance",
+  "pleaseEnterValidNumber": "Please enter a valid number",
+  "errorOccurred": "Error: {error}",
+  "@errorOccurred": {
+    "description": "Error message with parameter",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Connection failed"
+      }
+    }
+  },
+  "selectCurrency": "Select Currency",
+  "@selectCurrency": {
+    "description": "Title for currency selection dialog"
+  },
+  "searchCurrency": "Search currency...",
+  "@searchCurrency": {
+    "description": "Hint text for currency search field"
+  }
+}

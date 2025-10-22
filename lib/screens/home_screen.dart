@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:budgeting/models/transaction.dart';
 
 class HomeScreen extends StatefulWidget{
-  const Transactions ({super.key});
+  const HomeScreen ({super.key});
 
   @override
-  State<Transactions> createState() {
-    return _TransactionsState();
+  State<HomeScreen> createState() {
+    return _HomeScreenState();
   }
 }
 
-class _TransactionsState extends State<Transactions>{
+class _HomeScreenState extends State<HomeScreen>{
   final List<Transaction> _registeredTransactions = [
     Transaction(
       title: 'Investment Profit',

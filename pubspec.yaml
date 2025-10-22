@@ -10,6 +10,10 @@ dependencies:
   flutter:
     sdk: flutter
   
+  # Flutter Localization
+  flutter_localizations:
+    sdk: flutter
+  
   # State Management
   provider: ^6.1.1
   
@@ -21,13 +25,14 @@ dependencies:
   uuid: ^4.2.2
   
   # Date/Time Formatting
-  intl: ^0.19.0
+  intl: ^0.20.2
   
   # Charts
   fl_chart: ^0.66.0
   
   # UI
   cupertino_icons: ^1.0.6
+  shared_preferences: ^2.5.3
 
 dev_dependencies:
   flutter_test:
@@ -36,3 +41,4 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  generate: true

@@ -4,18 +4,18 @@ import 'package:budgeting/models/currency.dart';
 class CurrencyData {
   static final List<Currency> allCurrencies = [
     // Major Currencies
-    Currency('USD', '\$'),
-    Currency('EUR', '€'),
-    Currency('GBP', '£'),
-    Currency('JPY', '¥'),
-    Currency('CNY', '¥'),
-    Currency('KRW', '₩'),
-    Currency('CAD', 'CAD'),
-    Currency('AUD', 'AUD'),
-    Currency('CHF', 'CHF'),
-    Currency('HKD', 'HKD'),
-    Currency('SGD', 'SGD'),
-    Currency('NZD', 'NZD'),
+     Currency('USD', '\$', 'US Dollar'),
+    Currency('EUR', '€', 'Euro'),
+    Currency('GBP', '£', 'British Pound'),
+    Currency('JPY', '¥', 'Japanese Yen'),
+    Currency('CNY', '¥', 'Chinese Yuan'),
+    Currency('KRW', '₩', 'Korean Won'),
+    Currency('CAD', 'C\$', 'Canadian Dollar'),
+    Currency('AUD', 'A\$', 'Australian Dollar'),
+    Currency('CHF', 'CHF', 'Swiss Franc'),
+    Currency('HKD', 'HK\$', 'Hong Kong Dollar'),
+    Currency('SGD', 'S\$', 'Singapore Dollar'),
+    Currency('NZD', 'NZ\$', 'New Zealand Dollar'),
   ];
 
   /// Get currency by code
@@ -40,14 +40,14 @@ class CurrencyData {
     }
   }
 
-  /// Search currencies by code or symbol
+  /// Search currencies by name or code
   static List<Currency> searchCurrencies(String query) {
     if (query.isEmpty) return allCurrencies;
     
     final lowerQuery = query.toLowerCase();
     return allCurrencies.where((currency) {
       return currency.code.toLowerCase().contains(lowerQuery) ||
-          currency.symbol.toLowerCase().contains(lowerQuery);
+          currency.name.toLowerCase().contains(lowerQuery);
     }).toList();
   }
 }
