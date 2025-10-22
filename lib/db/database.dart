@@ -32,7 +32,7 @@ class DatabaseHelper {
   }
 
   Future _createDB(Database db, int version) async {
-    // currencies table
+    // currencies table - stores user's active currencies
     await db.execute('''
       CREATE TABLE currencies(
         code TEXT PRIMARY KEY,
@@ -56,13 +56,13 @@ class DatabaseHelper {
     // transactions table
     await db.execute('''
     CREATE TABLE transactions(
-      id TEXT PRIMARY KEY,           -- UUID v4
+      id TEXT PRIMARY KEY,
       title TEXT,
       amount REAL,
-      type INTEGER,                  -- 1: income, 0: expense
-      date TEXT NOT NULL,            -- 'YYYY-MM-DD'
+      type INTEGER,
+      date TEXT NOT NULL,
       accountId INTEGER,
-      category TEXT,                 -- enum.name in DB
+      category TEXT,
       note TEXT,
       recurring TEXT,
       FOREIGN KEY(accountId) REFERENCES accounts(id)
@@ -78,7 +78,6 @@ class DatabaseHelper {
   }
 
   Future _onUpgrade(Database db, int oldVersion, int newVersion) async {
-    // In case of schema changes, handle migrations here
     if (oldVersion < 2) {
       await db.execute('DROP TABLE IF EXISTS transactions');
       await db.execute('DROP TABLE IF EXISTS accounts');
@@ -93,11 +92,62 @@ class DatabaseHelper {
   }
 
   // ---------------------------------------------------------------------------
-  // Accounts
+  // Currencies - CRUD
   // ---------------------------------------------------------------------------
+  
+  /// Insert a new currency (user adds it)
+  Future<int> insertCurrency(Map<String, dynamic> row) async {
+    final db = await instance.database;
+    return await db.insert('currencies', row, conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  /// Get all user's currencies
+  Future<List<Map<String, dynamic>>> getAllCurrencies() async {
+    final db = await instance.database;
+    return await db.query('currencies', orderBy: 'code ASC');
+  }
+
+  /// Delete a currency (only if no accounts use it)
+  Future<int> deleteCurrency(String code) async {
+    final db = await instance.database;
+    // Check if any accounts use this currency
+    final accounts = await getAccountsByCurrency(code);
+    if (accounts.isNotEmpty) {
+      throw Exception('Cannot delete currency with existing accounts');
+    }
+    return await db.delete('currencies', where: 'code = ?', whereArgs: [code]);
+  }
+
+  /// Check if currency exists
+  Future<bool> currencyExists(String code) async {
+    final db = await instance.database;
+    final result = await db.query('currencies', where: 'code = ?', whereArgs: [code]);
+    return result.isNotEmpty;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Accounts - CRUD
+  // ---------------------------------------------------------------------------
+  
   Future<int> insertAccount(Map<String, dynamic> row) async {
     final db = await instance.database;
     return await db.insert('accounts', row);
+  }
+
+  Future<int> updateAccount(int id, Map<String, dynamic> row) async {
+    final db = await instance.database;
+    return await db.update('accounts', row, where: 'id = ?', whereArgs: [id]);
+  }
+
+  Future<int> deleteAccount(int id) async {
+    final db = await instance.database;
+    // This will also delete all associated transactions due to CASCADE
+    return await db.delete('accounts', where: 'id = ?', whereArgs: [id]);
+  }
+
+  Future<List<Map<String, dynamic>>> getAllAccounts() async {
+    final db = await instance.database;
+    return await db.query('accounts', orderBy: 'name ASC');
   }
 
   Future<List<Map<String, dynamic>>> getAccountsByCurrency(String currencyCode) async {
@@ -106,9 +156,16 @@ class DatabaseHelper {
         where: 'currencyCode = ?', whereArgs: [currencyCode], orderBy: 'name ASC');
   }
 
+  Future<Map<String, dynamic>?> getAccountById(int id) async {
+    final db = await instance.database;
+    final results = await db.query('accounts', where: 'id = ?', whereArgs: [id]);
+    return results.isNotEmpty ? results.first : null;
+  }
+
   // ---------------------------------------------------------------------------
   // Transactions - CRUD
   // ---------------------------------------------------------------------------
+  
   Future<int> insertTransaction(Map<String, dynamic> row) async {
     final db = await instance.database;
     return await db.insert('transactions', row, conflictAlgorithm: ConflictAlgorithm.abort);
@@ -128,12 +185,10 @@ class DatabaseHelper {
   // Transactions - Queries (Filter/Sort/Paging)
   // ---------------------------------------------------------------------------
 
-  /// Find Basic List (Category/Period/Account/Currency)
-  /// - If currency is specified, JOIN is required → use rawQuery
   Future<List<Map<String, dynamic>>> getTransactions({
     String? category,
-    String? startDate, // 'YYYY-MM-DD'
-    String? endDate,   // 'YYYY-MM-DD'
+    String? startDate,
+    String? endDate,
     int? accountId,
     String? currencyCode,
     int? limit,
@@ -142,7 +197,6 @@ class DatabaseHelper {
     final db = await instance.database;
 
     if (currencyCode == null) {
-      // single table query
       final where = <String>[];
       final args = <dynamic>[];
 
@@ -160,7 +214,6 @@ class DatabaseHelper {
         offset: offset,
       );
     } else {
-      // require JOIN: rawQuery
       final where = <String>['a.currencyCode = ?'];
       final args = <dynamic>[currencyCode];
 
@@ -183,7 +236,6 @@ class DatabaseHelper {
     }
   }
 
-  /// Find Transactions by Currency
   Future<List<Map<String, dynamic>>> getTransactionsByCurrency({
     required String currencyCode,
     String? startDate,
@@ -210,7 +262,6 @@ class DatabaseHelper {
     return await db.rawQuery(sql, args);
   }
   
-  /// Find Transactions by Account
   Future<List<Map<String, dynamic>>> getTransactionsByAccount({
     required int accountId,
     String? startDate,
@@ -237,11 +288,9 @@ class DatabaseHelper {
   }
 
   // ---------------------------------------------------------------------------
-  // Summary/Statistics (Home)
+  // Summary/Statistics
   // ---------------------------------------------------------------------------
 
-  /// Total Income/Total Expense/Net Profit
-  /// - categoryForExpenseOnly: If a category is selected, only expenses for that category are aggregated (reflecting requirements)
   Future<Map<String, num>> getTotals({
     String? currencyCode,
     int? accountId,
@@ -281,7 +330,6 @@ class DatabaseHelper {
     return {'income': income, 'expense': expense, 'net': income - expense};
   }
 
-  /// Find Account Balance Based on Transaction Sum (income - expense)
   Future<num> getComputedBalanceForAccount(int accountId) async {
     final db = await instance.database;
     final row = (await db.rawQuery('''
@@ -294,12 +342,6 @@ class DatabaseHelper {
     return (row['bal'] as num?) ?? 0;
   }
 
-  // ---------------------------------------------------------------------------
-  // Monthly Summary (Summary)
-  // ---------------------------------------------------------------------------
-
-  /// Monthly total income/total expense
-  /// Result example: [{'year':2025,'month':10,'income':1234.0,'expense':567.0}, ...]
   Future<List<Map<String, dynamic>>> getMonthlyIncomeExpense({
     String? currencyCode,
     int? accountId,
@@ -331,12 +373,11 @@ class DatabaseHelper {
     return await db.rawQuery(sql, args);
   }
 
-  /// Monthly category total for a specific month (pie chart)
   Future<List<Map<String, dynamic>>> getCategoryTotalsForMonth({
     String? currencyCode,
     int? accountId,
-    required String monthStart, // 'YYYY-MM-01'
-    required String monthEnd,   // 'YYYY-MM-last day'
+    required String monthStart,
+    required String monthEnd,
   }) async {
     final db = await instance.database;
 
@@ -359,7 +400,6 @@ class DatabaseHelper {
     return await db.rawQuery(sql, args);
   }
 
-  /// Monthly category total for a specific category (bar chart)
   Future<List<Map<String, dynamic>>> getMonthlyTotalsForCategory({
     String? currencyCode,
     int? accountId,
@@ -392,4 +432,3 @@ class DatabaseHelper {
     return await db.rawQuery(sql, args);
   }
 }
-  
