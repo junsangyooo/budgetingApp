@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:budgeting/db/database.dart';
 import 'package:budgeting/models/account.dart';
-import 'package:budgeting/models/currency.dart';
 import 'package:budgeting/utils/currency_data.dart';
 import 'package:budgeting/providers/locale_provider.dart';
 import 'package:budgeting/screens/main_navigation.dart';

@@ -35,5 +35,83 @@
   "searchCurrency": "Search currency...",
   "@searchCurrency": {
     "description": "Hint text for currency search field"
+  },
+
+  "transactions": "Transactions",
+  "noTransactionsFound": "No transactions found",
+  "allAccounts": "All Accounts",
+  "allTime": "All Time",
+  "allCategories": "All Categories",
+  "selectAccountOrCurrency": "Select Account or Currency",
+  "currencies": "Currencies",
+  "accounts": "Accounts",
+  "selectPeriod": "Select Period",
+  "thisMonth": "This Month",
+  "lastThreeMonths": "Last 3 Months",
+  "customRange": "Custom Range",
+  "income": "Income",
+  "expense": "Expense",
+  "balance": "Balance",
+  "food": "Food",
+  "dining": "Dining",
+  "drinks": "Drinks",
+  "transportation": "Transportation",
+  "housing": "Housing",
+  "subscription": "Subscription",
+  "shopping": "Shopping",
+  "health": "Health",
+  "education": "Education",
+  "entertainment": "Entertainment",
+  "gifts": "Gifts",
+  "investment": "Investment",
+  "others": "Others",
+  "deleteTransaction": "Delete Transaction",
+  "deleteConfirmation": "Are you sure you want to delete \"{title}\"?",
+  "@deleteConfirmation": {
+    "description": "Confirmation message for deleting a transaction",
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "cancel": "Cancel",
+  "delete": "Delete",
+  "transactionDeleted": "Transaction deleted",
+  "addTransaction": "Add Transaction",
+  "editTransaction": "Edit Transaction",
+  "title": "Title",
+  "amount": "Amount",
+  "category": "Category",
+  "account": "Account",
+  "date": "Date",
+  "note": "Note (Optional)",
+  "save": "Save",
+  "pleaseEnterTitle": "Please enter a title",
+  "pleaseEnterAmount": "Please enter an amount",
+  "pleaseSelectAccount": "Please select an account",
+  "transactionAdded": "Transaction added",
+  "transactionUpdated": "Transaction updated",
+  "noAccounts": "No Accounts",
+  "createAccountFirst": "Please create an account first before adding transactions.",
+  "ok": "OK",
+  "loading": "Loading...",
+  "currencyLabel": "Currency: {code}",
+  "@currencyLabel": {
+    "description": "Currency filter label",
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "accountLabel": "Account: #{id}",
+  "@accountLabel": {
+    "description": "Account filter label",
+    "placeholders": {
+      "id": {
+        "type": "int"
+      }
+    }
   }
 }

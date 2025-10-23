@@ -1,13 +1,13 @@
 /// Home/Summary sharing filters state
-/// - mode: 'all' | 'currency' | 'account' 
+/// - mode: 'all' | 'currency' | 'account'
 /// - currencyCode/accountId depends on mode
-/// - category is optional (if specified, 'expense' in home totals will only include that category)
+/// - categories: multiple categories can be selected (if specified, 'expense' in home totals will only include those categories)
 /// - period is startDate/endDate (YYYY-MM-DD), null means all
 class FilterState {
   final String mode;         // 'all' | 'currency' | 'account'
   final String? currencyCode;
   final int? accountId;
-  final String? category;    // enum.name
+  final List<String> categories;    // list of enum.name
   final String? startDate;   // 'YYYY-MM-DD'
   final String? endDate;     // 'YYYY-MM-DD'
 
@@ -15,7 +15,7 @@ class FilterState {
     this.mode = 'all',
     this.currencyCode,
     this.accountId,
-    this.category,
+    this.categories = const [],
     this.startDate,
     this.endDate,
   });
@@ -24,17 +24,17 @@ class FilterState {
     String? mode,
     String? currencyCode,
     int? accountId,
-    String? category,
+    List<String>? categories,
     String? startDate,
     String? endDate,
     bool clearRange = false,   // refresh period
-    bool clearCategory = false,
+    bool clearCategories = false,
   }) {
     return FilterState(
       mode: mode ?? this.mode,
       currencyCode: currencyCode ?? this.currencyCode,
       accountId: accountId ?? this.accountId,
-      category: clearCategory ? null : (category ?? this.category),
+      categories: clearCategories ? const [] : (categories ?? this.categories),
       startDate: clearRange ? null : (startDate ?? this.startDate),
       endDate: clearRange ? null : (endDate ?? this.endDate),
     );
@@ -44,24 +44,24 @@ class FilterState {
   factory FilterState.all() => const FilterState(mode: 'all');
 
   factory FilterState.forCurrency(String code,
-      {String? startDate, String? endDate, String? category}) {
+      {String? startDate, String? endDate, List<String>? categories}) {
     return FilterState(
       mode: 'currency',
       currencyCode: code,
       startDate: startDate,
       endDate: endDate,
-      category: category,
+      categories: categories ?? const [],
     );
   }
 
   factory FilterState.forAccount(int id,
-      {String? startDate, String? endDate, String? category}) {
+      {String? startDate, String? endDate, List<String>? categories}) {
     return FilterState(
       mode: 'account',
       accountId: id,
       startDate: startDate,
       endDate: endDate,
-      category: category,
+      categories: categories ?? const [],
     );
   }
 }

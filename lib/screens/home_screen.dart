@@ -1,45 +1,156 @@
 import 'package:flutter/material.dart';
-import 'package:budgeting/models/transaction.dart';
+import 'package:provider/provider.dart';
+import 'package:budgeting/viewmodels/home_view_model.dart';
+import 'package:budgeting/widgets/filter_bar.dart';
+import 'package:budgeting/widgets/summary_chart.dart';
+import 'package:budgeting/widgets/transaction_list.dart';
+import 'package:budgeting/widgets/transaction_dialog.dart';
+import 'package:budgeting/models/transaction.dart' as M;
+import 'package:budgeting/generated/app_localizations.dart';
 
-class HomeScreen extends StatefulWidget{
-  const HomeScreen ({super.key});
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() {
-    return _HomeScreenState();
+  Widget build(BuildContext context) {
+    // Use the existing HomeViewModel from the parent MultiProvider in main.dart
+    // This ensures we have a single instance across the app
+    final viewModel = Provider.of<HomeViewModel>(context, listen: false);
+
+    // Load data when the screen is first built
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      viewModel.load();
+    });
+
+    return const HomeScreenContent();
   }
 }
 
-class _HomeScreenState extends State<HomeScreen>{
-  final List<Transaction> _registeredTransactions = [
-    Transaction(
-      title: 'Investment Profit',
-      amount: 100.0,
-      type: true,
-      date: DateTime.now(),
-      accountId: 1,
-      category: Category.income,
-      note: 'Selled the stocks for profit',
-    ),
-    Transaction(
-      title: 'Groceries',
-      amount: 50.0,
-      type: false,
-      date: DateTime.now(),
-      accountId: 1,
-      category: Category.food,
-      note: 'Weekly grocery shopping',
-    ),
-  ];
+class HomeScreenContent extends StatelessWidget {
+  const HomeScreenContent({super.key});
+
   @override
   Widget build(BuildContext context) {
+    final viewModel = context.watch<HomeViewModel>();
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
-      body: Column(
-        children: [
-          Text('The chart'),
-          Text('Expenses list...'),
+      appBar: AppBar(
+        title: Text(l10n.transactions),
+        elevation: 0,
+      ),
+      body: viewModel.loading
+          ? const Center(child: CircularProgressIndicator())
+          : Column(
+              children: [
+                // Filter Bar - Fixed at top
+                FilterBar(
+                  currentFilter: viewModel.filter,
+                  onFilterChanged: viewModel.updateFilter,
+                ),
+
+                // Scrollable content: Summary + Transactions
+                Expanded(
+                  child: viewModel.items.isEmpty
+                      ? Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.receipt_long_outlined,
+                                size: 64,
+                                color: Colors.grey[400],
+                              ),
+                              const SizedBox(height: 16),
+                              Text(
+                                l10n.noTransactionsFound,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.grey[600],
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      : CustomScrollView(
+                          slivers: [
+                            // Summary Chart
+                            const SliverToBoxAdapter(
+                              child: SummaryChart(),
+                            ),
+
+                            // Transactions List
+                            SliverList(
+                              delegate: SliverChildBuilderDelegate(
+                                (context, index) {
+                                  final transaction = viewModel.items[index];
+                                  return TransactionListItem(
+                                    transaction: transaction,
+                                    onEdit: () => _showEditDialog(context, transaction, viewModel),
+                                    onDelete: () => _confirmDelete(context, transaction, viewModel),
+                                  );
+                                },
+                                childCount: viewModel.items.length,
+                              ),
+                            ),
+                          ],
+                        ),
+                ),
+              ],
+            ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _showAddTransactionDialog(context),
+        child: const Icon(Icons.add),
+      ),
+    );
+  }
+
+  void _showAddTransactionDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (dialogContext) => ChangeNotifierProvider.value(
+        value: context.read<HomeViewModel>(),
+        child: const TransactionDialog(),
+      ),
+    );
+  }
+
+  void _showEditDialog(BuildContext context, M.Transaction transaction, HomeViewModel viewModel) {
+    showDialog(
+      context: context,
+      builder: (dialogContext) => ChangeNotifierProvider.value(
+        value: viewModel,
+        child: TransactionDialog(existingTransaction: transaction),
+      ),
+    );
+  }
+
+  void _confirmDelete(BuildContext context, M.Transaction transaction, HomeViewModel viewModel) {
+    final l10n = AppLocalizations.of(context)!;
+
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(l10n.deleteTransaction),
+        content: Text(l10n.deleteConfirmation(transaction.title)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: Text(l10n.cancel),
+          ),
+          TextButton(
+            onPressed: () {
+              viewModel.deleteTx(transaction.id);
+              Navigator.of(ctx).pop();
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(l10n.transactionDeleted)),
+              );
+            },
+            style: TextButton.styleFrom(foregroundColor: Colors.red),
+            child: Text(l10n.delete),
+          ),
         ],
-      )
+      ),
     );
   }
 }

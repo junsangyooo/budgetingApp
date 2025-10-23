@@ -35,5 +35,83 @@
   "searchCurrency": "통화 검색...",
   "@searchCurrency": {
     "description": "통화 검색 필드 힌트 텍스트"
+  },
+
+  "transactions": "거래 내역",
+  "noTransactionsFound": "거래 내역이 없습니다",
+  "allAccounts": "모든 계좌",
+  "allTime": "전체 기간",
+  "allCategories": "모든 카테고리",
+  "selectAccountOrCurrency": "계좌 또는 통화 선택",
+  "currencies": "통화",
+  "accounts": "계좌",
+  "selectPeriod": "기간 선택",
+  "thisMonth": "이번 달",
+  "lastThreeMonths": "최근 3개월",
+  "customRange": "사용자 지정",
+  "income": "수입",
+  "expense": "지출",
+  "balance": "잔액",
+  "food": "식료품",
+  "dining": "외식",
+  "drinks": "음료",
+  "transportation": "교통",
+  "housing": "주거",
+  "subscription": "구독",
+  "shopping": "쇼핑",
+  "health": "건강",
+  "education": "교육",
+  "entertainment": "여가",
+  "gifts": "선물",
+  "investment": "투자",
+  "others": "기타",
+  "deleteTransaction": "거래 삭제",
+  "deleteConfirmation": "\"{title}\"을(를) 삭제하시겠습니까?",
+  "@deleteConfirmation": {
+    "description": "거래 삭제 확인 메시지",
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "cancel": "취소",
+  "delete": "삭제",
+  "transactionDeleted": "거래가 삭제되었습니다",
+  "addTransaction": "거래 추가",
+  "editTransaction": "거래 수정",
+  "title": "제목",
+  "amount": "금액",
+  "category": "카테고리",
+  "account": "계좌",
+  "date": "날짜",
+  "note": "메모 (선택사항)",
+  "save": "저장",
+  "pleaseEnterTitle": "제목을 입력하세요",
+  "pleaseEnterAmount": "금액을 입력하세요",
+  "pleaseSelectAccount": "계좌를 선택하세요",
+  "transactionAdded": "거래가 추가되었습니다",
+  "transactionUpdated": "거래가 수정되었습니다",
+  "noAccounts": "계좌 없음",
+  "createAccountFirst": "거래를 추가하기 전에 먼저 계좌를 만들어주세요.",
+  "ok": "확인",
+  "loading": "로딩 중...",
+  "currencyLabel": "통화: {code}",
+  "@currencyLabel": {
+    "description": "통화 필터 레이블",
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "accountLabel": "계좌: #{id}",
+  "@accountLabel": {
+    "description": "계좌 필터 레이블",
+    "placeholders": {
+      "id": {
+        "type": "int"
+      }
+    }
   }
 }
