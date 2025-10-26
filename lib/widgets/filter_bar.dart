@@ -143,7 +143,7 @@ class _CurrencyAccountFilterDropdown extends StatelessWidget {
       builder: (ctx) => Container(
         padding: const EdgeInsets.symmetric(vertical: 16),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: MainAxisSize.max,
           children: [
             // Title
             Padding(
@@ -155,96 +155,138 @@ class _CurrencyAccountFilterDropdown extends StatelessWidget {
             ),
             const Divider(),
 
-            // All option
-            ListTile(
-              leading: const Icon(Icons.select_all),
-              title: Text(l10n.allAccounts),
-              selected: currentFilter.mode == 'all',
-              onTap: () {
-                Navigator.of(ctx).pop();
-                onFilterChanged(FilterState.all().copyWith(
-                  categories: currentFilter.categories,
-                  startDate: currentFilter.startDate,
-                  endDate: currentFilter.endDate,
-                ));
-              },
+            // Scrollable content
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    // All option
+                    ListTile(
+                      leading: const Icon(Icons.select_all),
+                      title: Text(l10n.allAccounts),
+                      selected: currentFilter.mode == 'all',
+                      onTap: () {
+                        Navigator.of(ctx).pop();
+                        onFilterChanged(FilterState.all().copyWith(
+                          categories: currentFilter.categories,
+                          startDate: currentFilter.startDate,
+                          endDate: currentFilter.endDate,
+                        ));
+                      },
+                    ),
+
+                    // Currencies section
+                    if (currencies.isNotEmpty) ...[
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            l10n.currencies,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ),
+                      ),
+                      ...currencies.map((currency) {
+                        final code = currency['code'] as String;
+                        return ListTile(
+                          leading: const Icon(Icons.monetization_on),
+                          title: Text(_getLocalizedCurrencyName(context, code)),
+                          subtitle: Text(code),
+                          selected: currentFilter.mode == 'currency' && currentFilter.currencyCode == code,
+                          onTap: () {
+                            Navigator.of(ctx).pop();
+                            onFilterChanged(FilterState.forCurrency(
+                              code,
+                              startDate: currentFilter.startDate,
+                              endDate: currentFilter.endDate,
+                              categories: currentFilter.categories,
+                            ));
+                          },
+                        );
+                      }),
+                    ],
+
+                    // Accounts section
+                    if (accounts.isNotEmpty) ...[
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            l10n.accounts,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ),
+                      ),
+                      ...accounts.map((account) {
+                        final id = account['id'] as int;
+                        return ListTile(
+                          leading: const Icon(Icons.account_balance_wallet),
+                          title: Text('${account['name']}'),
+                          subtitle: Text(account['currencyCode'] as String),
+                          selected: currentFilter.mode == 'account' && currentFilter.accountId == id,
+                          onTap: () {
+                            Navigator.of(ctx).pop();
+                            onFilterChanged(FilterState.forAccount(
+                              id,
+                              startDate: currentFilter.startDate,
+                              endDate: currentFilter.endDate,
+                              categories: currentFilter.categories,
+                            ));
+                          },
+                        );
+                      }),
+                    ],
+                  ],
+                ),
+              ),
             ),
-
-            // Currencies section
-            if (currencies.isNotEmpty) ...[
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    l10n.currencies,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.grey,
-                    ),
-                  ),
-                ),
-              ),
-              ...currencies.map((currency) {
-                final code = currency['code'] as String;
-                return ListTile(
-                  leading: const Icon(Icons.monetization_on),
-                  title: Text('${currency['name']}'),
-                  subtitle: Text(code),
-                  selected: currentFilter.mode == 'currency' && currentFilter.currencyCode == code,
-                  onTap: () {
-                    Navigator.of(ctx).pop();
-                    onFilterChanged(FilterState.forCurrency(
-                      code,
-                      startDate: currentFilter.startDate,
-                      endDate: currentFilter.endDate,
-                      categories: currentFilter.categories,
-                    ));
-                  },
-                );
-              }),
-            ],
-
-            // Accounts section
-            if (accounts.isNotEmpty) ...[
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    l10n.accounts,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.grey,
-                    ),
-                  ),
-                ),
-              ),
-              ...accounts.map((account) {
-                final id = account['id'] as int;
-                return ListTile(
-                  leading: const Icon(Icons.account_balance_wallet),
-                  title: Text('${account['name']}'),
-                  subtitle: Text(account['currencyCode'] as String),
-                  selected: currentFilter.mode == 'account' && currentFilter.accountId == id,
-                  onTap: () {
-                    Navigator.of(ctx).pop();
-                    onFilterChanged(FilterState.forAccount(
-                      id,
-                      startDate: currentFilter.startDate,
-                      endDate: currentFilter.endDate,
-                      categories: currentFilter.categories,
-                    ));
-                  },
-                );
-              }),
-            ],
           ],
         ),
       ),
     );
+  }
+
+  String _getLocalizedCurrencyName(BuildContext context, String code) {
+    final l10n = AppLocalizations.of(context)!;
+
+    switch (code) {
+      case 'USD':
+        return l10n.currency_USD;
+      case 'EUR':
+        return l10n.currency_EUR;
+      case 'GBP':
+        return l10n.currency_GBP;
+      case 'JPY':
+        return l10n.currency_JPY;
+      case 'CNY':
+        return l10n.currency_CNY;
+      case 'KRW':
+        return l10n.currency_KRW;
+      case 'CAD':
+        return l10n.currency_CAD;
+      case 'AUD':
+        return l10n.currency_AUD;
+      case 'CHF':
+        return l10n.currency_CHF;
+      case 'HKD':
+        return l10n.currency_HKD;
+      case 'SGD':
+        return l10n.currency_SGD;
+      case 'NZD':
+        return l10n.currency_NZD;
+      default:
+        return code;
+    }
   }
 }
 
@@ -373,23 +415,28 @@ class _PeriodFilterDropdown extends StatelessWidget {
               title: Text(l10n.customRange),
               onTap: () async {
                 Navigator.of(ctx).pop();
-                final picked = await showDateRangePicker(
-                  context: context,
-                  firstDate: DateTime(2020),
-                  lastDate: DateTime.now(),
-                  initialDateRange: currentFilter.startDate != null
-                      ? DateTimeRange(
-                          start: DateTime.parse(currentFilter.startDate!),
-                          end: DateTime.parse(currentFilter.endDate!),
-                        )
-                      : null,
-                );
+                // Delay to ensure bottom sheet is closed before showing date picker
+                await Future.delayed(const Duration(milliseconds: 300));
 
-                if (picked != null && context.mounted) {
-                  onFilterChanged(currentFilter.copyWith(
-                    startDate: picked.start.toString().substring(0, 10),
-                    endDate: picked.end.toString().substring(0, 10),
-                  ));
+                if (context.mounted) {
+                  final picked = await showDateRangePicker(
+                    context: context,
+                    firstDate: DateTime(2020),
+                    lastDate: DateTime.now(),
+                    initialDateRange: currentFilter.startDate != null
+                        ? DateTimeRange(
+                            start: DateTime.parse(currentFilter.startDate!),
+                            end: DateTime.parse(currentFilter.endDate!),
+                          )
+                        : null,
+                  );
+
+                  if (picked != null && context.mounted) {
+                    onFilterChanged(currentFilter.copyWith(
+                      startDate: picked.start.toString().substring(0, 10),
+                      endDate: picked.end.toString().substring(0, 10),
+                    ));
+                  }
                 }
               },
             ),
@@ -472,6 +519,8 @@ class _CategoryMultiSelect extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
 
     switch (category) {
+      case 'income':
+        return l10n.income;
       case 'food':
         return l10n.food;
       case 'dining':

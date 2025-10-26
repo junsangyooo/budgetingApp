@@ -6,6 +6,7 @@ import 'package:budgeting/widgets/summary_chart.dart';
 import 'package:budgeting/widgets/transaction_list.dart';
 import 'package:budgeting/widgets/transaction_dialog.dart';
 import 'package:budgeting/models/transaction.dart' as M;
+import 'package:budgeting/utils/subscription_service.dart';
 import 'package:budgeting/generated/app_localizations.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -17,9 +18,11 @@ class HomeScreen extends StatelessWidget {
     // This ensures we have a single instance across the app
     final viewModel = Provider.of<HomeViewModel>(context, listen: false);
 
-    // Load data when the screen is first built
+    // Load data and process subscriptions when the screen is first built
     WidgetsBinding.instance.addPostFrameCallback((_) {
       viewModel.load();
+      // Process subscriptions (auto-create transactions if due)
+      SubscriptionService.instance.processSubscriptions();
     });
 
     return const HomeScreenContent();
@@ -36,8 +39,8 @@ class HomeScreenContent extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(l10n.transactions),
         elevation: 0,
+        toolbarHeight: 0,
       ),
       body: viewModel.loading
           ? const Center(child: CircularProgressIndicator())

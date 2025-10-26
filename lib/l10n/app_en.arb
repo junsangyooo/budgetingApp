@@ -42,6 +42,7 @@
   "allAccounts": "All Accounts",
   "allTime": "All Time",
   "allCategories": "All Categories",
+  "filter": "Filter",
   "selectAccountOrCurrency": "Select Account or Currency",
   "currencies": "Currencies",
   "accounts": "Accounts",
@@ -113,5 +114,80 @@
         "type": "int"
       }
     }
-  }
+  },
+  "currency_USD": "US Dollar",
+  "currency_EUR": "Euro",
+  "currency_GBP": "British Pound",
+  "currency_JPY": "Japanese Yen",
+  "currency_CNY": "Chinese Yuan",
+  "currency_KRW": "Korean Won",
+  "currency_CAD": "Canadian Dollar",
+  "currency_AUD": "Australian Dollar",
+  "currency_CHF": "Swiss Franc",
+  "currency_HKD": "Hong Kong Dollar",
+  "currency_SGD": "Singapore Dollar",
+  "currency_NZD": "New Zealand Dollar",
+  "navHome": "Home",
+  "navSummary": "Summary",
+  "navSettings": "Settings",
+  "settings": "Settings",
+  "language": "Language",
+  "selectLanguage": "Select Language",
+  "subscriptions": "Subscriptions",
+  "addSubscription": "Add Subscription",
+  "subscriptionName": "Subscription Name",
+  "subscriptionAmount": "Amount",
+  "subscriptionAccount": "Account",
+  "subscriptionStartDate": "Start Date",
+  "subscriptionEndDate": "End Date (Optional)",
+  "subscriptionPayingDate": "Day of Month",
+  "subscriptionFrequency": "Frequency",
+  "deleteSubscription": "Delete Subscription",
+  "deleteSubscriptionConfirm": "Are you sure you want to delete \"{name}\"?",
+  "@deleteSubscriptionConfirm": {
+    "description": "Confirmation message for deleting a subscription",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "subscriptionAdded": "Subscription added successfully",
+  "subscriptionUpdated": "Subscription updated successfully",
+  "subscriptionDeleted": "Subscription deleted successfully",
+  "noSubscriptions": "No Subscriptions",
+  "monthly": "Monthly",
+  "pleaseEnterSubscriptionName": "Please enter a subscription name",
+  "pleaseEnterSubscriptionAmount": "Please enter a subscription amount",
+  "pleaseSelectSubscriptionAccount": "Please select an account",
+  "categories": "Categories",
+  "manageCategories": "Manage Categories",
+  "addCategory": "Add Category",
+  "categoryName": "Category Name",
+  "newAccountTitle": "New Account",
+  "addNewAccount": "Add New Account",
+  "deleteAccount": "Delete Account",
+  "deleteAccountConfirm": "Are you sure you want to delete account \"{name}\"? All associated transactions will be deleted.",
+  "@deleteAccountConfirm": {
+    "description": "Confirmation message for deleting an account",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "accountDeleted": "Account deleted successfully",
+  "accountAdded": "Account added successfully",
+  "categoryAdded": "Category added successfully",
+  "categoryDeleted": "Category deleted successfully",
+  "pleaseEnterCategoryName": "Please enter a category name",
+  "editCategory": "Edit Category",
+  "categoryUpdated": "Category updated successfully",
+  "summary": "Summary",
+  "monthlyNetStats": "Monthly Net Stats",
+  "categoryBreakdown": "Category Breakdown",
+  "selectCategories": "Select Categories",
+  "selectAccountOrCurrencyForChart": "Select Account or Currency",
+  "noData": "No data available",
+  "all": "All"
 }

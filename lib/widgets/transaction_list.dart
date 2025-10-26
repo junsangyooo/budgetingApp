@@ -148,7 +148,7 @@ class TransactionListItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    '${transaction.type ? '+' : '-'}${transaction.amount.toStringAsFixed(2)}',
+                    '${transaction.type ? '+' : '-'}${NumberFormat('#,###.##').format(transaction.amount)}',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,

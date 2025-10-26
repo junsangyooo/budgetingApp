@@ -260,6 +260,12 @@ abstract class AppLocalizations {
   /// **'All Categories'**
   String get allCategories;
 
+  /// No description provided for @filter.
+  ///
+  /// In en, this message translates to:
+  /// **'Filter'**
+  String get filter;
+
   /// No description provided for @selectAccountOrCurrency.
   ///
   /// In en, this message translates to:
@@ -547,6 +553,360 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Account: #{id}'**
   String accountLabel(int id);
+
+  /// No description provided for @currency_USD.
+  ///
+  /// In en, this message translates to:
+  /// **'US Dollar'**
+  String get currency_USD;
+
+  /// No description provided for @currency_EUR.
+  ///
+  /// In en, this message translates to:
+  /// **'Euro'**
+  String get currency_EUR;
+
+  /// No description provided for @currency_GBP.
+  ///
+  /// In en, this message translates to:
+  /// **'British Pound'**
+  String get currency_GBP;
+
+  /// No description provided for @currency_JPY.
+  ///
+  /// In en, this message translates to:
+  /// **'Japanese Yen'**
+  String get currency_JPY;
+
+  /// No description provided for @currency_CNY.
+  ///
+  /// In en, this message translates to:
+  /// **'Chinese Yuan'**
+  String get currency_CNY;
+
+  /// No description provided for @currency_KRW.
+  ///
+  /// In en, this message translates to:
+  /// **'Korean Won'**
+  String get currency_KRW;
+
+  /// No description provided for @currency_CAD.
+  ///
+  /// In en, this message translates to:
+  /// **'Canadian Dollar'**
+  String get currency_CAD;
+
+  /// No description provided for @currency_AUD.
+  ///
+  /// In en, this message translates to:
+  /// **'Australian Dollar'**
+  String get currency_AUD;
+
+  /// No description provided for @currency_CHF.
+  ///
+  /// In en, this message translates to:
+  /// **'Swiss Franc'**
+  String get currency_CHF;
+
+  /// No description provided for @currency_HKD.
+  ///
+  /// In en, this message translates to:
+  /// **'Hong Kong Dollar'**
+  String get currency_HKD;
+
+  /// No description provided for @currency_SGD.
+  ///
+  /// In en, this message translates to:
+  /// **'Singapore Dollar'**
+  String get currency_SGD;
+
+  /// No description provided for @currency_NZD.
+  ///
+  /// In en, this message translates to:
+  /// **'New Zealand Dollar'**
+  String get currency_NZD;
+
+  /// No description provided for @navHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get navHome;
+
+  /// No description provided for @navSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Summary'**
+  String get navSummary;
+
+  /// No description provided for @navSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get navSettings;
+
+  /// No description provided for @settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settings;
+
+  /// No description provided for @language.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get language;
+
+  /// No description provided for @selectLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Language'**
+  String get selectLanguage;
+
+  /// No description provided for @subscriptions.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscriptions'**
+  String get subscriptions;
+
+  /// No description provided for @addSubscription.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Subscription'**
+  String get addSubscription;
+
+  /// No description provided for @subscriptionName.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscription Name'**
+  String get subscriptionName;
+
+  /// No description provided for @subscriptionAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount'**
+  String get subscriptionAmount;
+
+  /// No description provided for @subscriptionAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get subscriptionAccount;
+
+  /// No description provided for @subscriptionStartDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Date'**
+  String get subscriptionStartDate;
+
+  /// No description provided for @subscriptionEndDate.
+  ///
+  /// In en, this message translates to:
+  /// **'End Date (Optional)'**
+  String get subscriptionEndDate;
+
+  /// No description provided for @subscriptionPayingDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Day of Month'**
+  String get subscriptionPayingDate;
+
+  /// No description provided for @subscriptionFrequency.
+  ///
+  /// In en, this message translates to:
+  /// **'Frequency'**
+  String get subscriptionFrequency;
+
+  /// No description provided for @deleteSubscription.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Subscription'**
+  String get deleteSubscription;
+
+  /// Confirmation message for deleting a subscription
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete \"{name}\"?'**
+  String deleteSubscriptionConfirm(String name);
+
+  /// No description provided for @subscriptionAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscription added successfully'**
+  String get subscriptionAdded;
+
+  /// No description provided for @subscriptionUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscription updated successfully'**
+  String get subscriptionUpdated;
+
+  /// No description provided for @subscriptionDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscription deleted successfully'**
+  String get subscriptionDeleted;
+
+  /// No description provided for @noSubscriptions.
+  ///
+  /// In en, this message translates to:
+  /// **'No Subscriptions'**
+  String get noSubscriptions;
+
+  /// No description provided for @monthly.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly'**
+  String get monthly;
+
+  /// No description provided for @pleaseEnterSubscriptionName.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a subscription name'**
+  String get pleaseEnterSubscriptionName;
+
+  /// No description provided for @pleaseEnterSubscriptionAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a subscription amount'**
+  String get pleaseEnterSubscriptionAmount;
+
+  /// No description provided for @pleaseSelectSubscriptionAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select an account'**
+  String get pleaseSelectSubscriptionAccount;
+
+  /// No description provided for @categories.
+  ///
+  /// In en, this message translates to:
+  /// **'Categories'**
+  String get categories;
+
+  /// No description provided for @manageCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage Categories'**
+  String get manageCategories;
+
+  /// No description provided for @addCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Category'**
+  String get addCategory;
+
+  /// No description provided for @categoryName.
+  ///
+  /// In en, this message translates to:
+  /// **'Category Name'**
+  String get categoryName;
+
+  /// No description provided for @newAccountTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New Account'**
+  String get newAccountTitle;
+
+  /// No description provided for @addNewAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Add New Account'**
+  String get addNewAccount;
+
+  /// No description provided for @deleteAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Account'**
+  String get deleteAccount;
+
+  /// Confirmation message for deleting an account
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete account \"{name}\"? All associated transactions will be deleted.'**
+  String deleteAccountConfirm(String name);
+
+  /// No description provided for @accountDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Account deleted successfully'**
+  String get accountDeleted;
+
+  /// No description provided for @accountAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'Account added successfully'**
+  String get accountAdded;
+
+  /// No description provided for @categoryAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'Category added successfully'**
+  String get categoryAdded;
+
+  /// No description provided for @categoryDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Category deleted successfully'**
+  String get categoryDeleted;
+
+  /// No description provided for @pleaseEnterCategoryName.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a category name'**
+  String get pleaseEnterCategoryName;
+
+  /// No description provided for @editCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Category'**
+  String get editCategory;
+
+  /// No description provided for @categoryUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Category updated successfully'**
+  String get categoryUpdated;
+
+  /// No description provided for @summary.
+  ///
+  /// In en, this message translates to:
+  /// **'Summary'**
+  String get summary;
+
+  /// No description provided for @monthlyNetStats.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly Net Stats'**
+  String get monthlyNetStats;
+
+  /// No description provided for @categoryBreakdown.
+  ///
+  /// In en, this message translates to:
+  /// **'Category Breakdown'**
+  String get categoryBreakdown;
+
+  /// No description provided for @selectCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Categories'**
+  String get selectCategories;
+
+  /// No description provided for @selectAccountOrCurrencyForChart.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Account or Currency'**
+  String get selectAccountOrCurrencyForChart;
+
+  /// No description provided for @noData.
+  ///
+  /// In en, this message translates to:
+  /// **'No data available'**
+  String get noData;
+
+  /// No description provided for @all.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get all;
 }
 
 class _AppLocalizationsDelegate

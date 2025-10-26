@@ -93,6 +93,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get allCategories => 'All Categories';
 
   @override
+  String get filter => 'Filter';
+
+  @override
   String get selectAccountOrCurrency => 'Select Account or Currency';
 
   @override
@@ -242,4 +245,186 @@ class AppLocalizationsEn extends AppLocalizations {
   String accountLabel(int id) {
     return 'Account: #$id';
   }
+
+  @override
+  String get currency_USD => 'US Dollar';
+
+  @override
+  String get currency_EUR => 'Euro';
+
+  @override
+  String get currency_GBP => 'British Pound';
+
+  @override
+  String get currency_JPY => 'Japanese Yen';
+
+  @override
+  String get currency_CNY => 'Chinese Yuan';
+
+  @override
+  String get currency_KRW => 'Korean Won';
+
+  @override
+  String get currency_CAD => 'Canadian Dollar';
+
+  @override
+  String get currency_AUD => 'Australian Dollar';
+
+  @override
+  String get currency_CHF => 'Swiss Franc';
+
+  @override
+  String get currency_HKD => 'Hong Kong Dollar';
+
+  @override
+  String get currency_SGD => 'Singapore Dollar';
+
+  @override
+  String get currency_NZD => 'New Zealand Dollar';
+
+  @override
+  String get navHome => 'Home';
+
+  @override
+  String get navSummary => 'Summary';
+
+  @override
+  String get navSettings => 'Settings';
+
+  @override
+  String get settings => 'Settings';
+
+  @override
+  String get language => 'Language';
+
+  @override
+  String get selectLanguage => 'Select Language';
+
+  @override
+  String get subscriptions => 'Subscriptions';
+
+  @override
+  String get addSubscription => 'Add Subscription';
+
+  @override
+  String get subscriptionName => 'Subscription Name';
+
+  @override
+  String get subscriptionAmount => 'Amount';
+
+  @override
+  String get subscriptionAccount => 'Account';
+
+  @override
+  String get subscriptionStartDate => 'Start Date';
+
+  @override
+  String get subscriptionEndDate => 'End Date (Optional)';
+
+  @override
+  String get subscriptionPayingDate => 'Day of Month';
+
+  @override
+  String get subscriptionFrequency => 'Frequency';
+
+  @override
+  String get deleteSubscription => 'Delete Subscription';
+
+  @override
+  String deleteSubscriptionConfirm(String name) {
+    return 'Are you sure you want to delete \"$name\"?';
+  }
+
+  @override
+  String get subscriptionAdded => 'Subscription added successfully';
+
+  @override
+  String get subscriptionUpdated => 'Subscription updated successfully';
+
+  @override
+  String get subscriptionDeleted => 'Subscription deleted successfully';
+
+  @override
+  String get noSubscriptions => 'No Subscriptions';
+
+  @override
+  String get monthly => 'Monthly';
+
+  @override
+  String get pleaseEnterSubscriptionName => 'Please enter a subscription name';
+
+  @override
+  String get pleaseEnterSubscriptionAmount =>
+      'Please enter a subscription amount';
+
+  @override
+  String get pleaseSelectSubscriptionAccount => 'Please select an account';
+
+  @override
+  String get categories => 'Categories';
+
+  @override
+  String get manageCategories => 'Manage Categories';
+
+  @override
+  String get addCategory => 'Add Category';
+
+  @override
+  String get categoryName => 'Category Name';
+
+  @override
+  String get newAccountTitle => 'New Account';
+
+  @override
+  String get addNewAccount => 'Add New Account';
+
+  @override
+  String get deleteAccount => 'Delete Account';
+
+  @override
+  String deleteAccountConfirm(String name) {
+    return 'Are you sure you want to delete account \"$name\"? All associated transactions will be deleted.';
+  }
+
+  @override
+  String get accountDeleted => 'Account deleted successfully';
+
+  @override
+  String get accountAdded => 'Account added successfully';
+
+  @override
+  String get categoryAdded => 'Category added successfully';
+
+  @override
+  String get categoryDeleted => 'Category deleted successfully';
+
+  @override
+  String get pleaseEnterCategoryName => 'Please enter a category name';
+
+  @override
+  String get editCategory => 'Edit Category';
+
+  @override
+  String get categoryUpdated => 'Category updated successfully';
+
+  @override
+  String get summary => 'Summary';
+
+  @override
+  String get monthlyNetStats => 'Monthly Net Stats';
+
+  @override
+  String get categoryBreakdown => 'Category Breakdown';
+
+  @override
+  String get selectCategories => 'Select Categories';
+
+  @override
+  String get selectAccountOrCurrencyForChart => 'Select Account or Currency';
+
+  @override
+  String get noData => 'No data available';
+
+  @override
+  String get all => 'All';
 }

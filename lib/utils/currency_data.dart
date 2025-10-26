@@ -4,7 +4,7 @@ import 'package:budgeting/models/currency.dart';
 class CurrencyData {
   static final List<Currency> allCurrencies = [
     // Major Currencies
-     Currency('USD', '\$', 'US Dollar'),
+    Currency('USD', '\$', 'US Dollar'),
     Currency('EUR', '€', 'Euro'),
     Currency('GBP', '£', 'British Pound'),
     Currency('JPY', '¥', 'Japanese Yen'),

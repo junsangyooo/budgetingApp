@@ -22,6 +22,7 @@ class _TransactionDialogState extends State<TransactionDialog> {
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
   final _noteController = TextEditingController();
+  final _amountFormatter = NumberFormat('#,###.##');
 
   bool _isIncome = true;
   M.Category _selectedCategory = M.Category.food;
@@ -38,7 +39,7 @@ class _TransactionDialogState extends State<TransactionDialog> {
     if (widget.existingTransaction != null) {
       final tx = widget.existingTransaction!;
       _titleController.text = tx.title;
-      _amountController.text = tx.amount.toStringAsFixed(2);
+      _amountController.text = _amountFormatter.format(tx.amount);
       _noteController.text = tx.note ?? '';
       _isIncome = tx.type;
       _selectedCategory = tx.category;
@@ -134,17 +135,18 @@ class _TransactionDialogState extends State<TransactionDialog> {
                 decoration: InputDecoration(
                   labelText: l10n.amount,
                   border: const OutlineInputBorder(),
-                  prefixText: '\$ ',
                 ),
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+                  FilteringTextInputFormatter.allow(RegExp(r'[\d,.]')),
+                  _ThousandsSeparatorInputFormatter(),
                 ],
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return l10n.pleaseEnterAmount;
                   }
-                  if (double.tryParse(value) == null) {
+                  final cleanValue = value.replaceAll(',', '');
+                  if (double.tryParse(cleanValue) == null) {
                     return l10n.pleaseEnterValidNumber;
                   }
                   return null;
@@ -260,10 +262,11 @@ class _TransactionDialogState extends State<TransactionDialog> {
       return;
     }
 
+    final cleanAmount = _amountController.text.replaceAll(',', '');
     final transaction = M.Transaction(
       id: widget.existingTransaction?.id,
       title: _titleController.text,
-      amount: double.parse(_amountController.text),
+      amount: double.parse(cleanAmount),
       type: _isIncome,
       date: _selectedDate,
       accountId: _selectedAccountId!,
@@ -332,5 +335,65 @@ class _TransactionDialogState extends State<TransactionDialog> {
       case M.Category.others:
         return l10n.others;
     }
+  }
+}
+
+/// Custom input formatter to add thousand separators (commas) as user types
+class _ThousandsSeparatorInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    if (newValue.text.isEmpty) {
+      return newValue;
+    }
+
+    // Remove all commas to get the raw number
+    String newText = newValue.text.replaceAll(',', '');
+
+    // If the text is not a valid number format, return old value
+    if (!RegExp(r'^\d*\.?\d{0,2}$').hasMatch(newText)) {
+      return oldValue;
+    }
+
+    // Split into integer and decimal parts
+    final parts = newText.split('.');
+    String integerPart = parts[0];
+    String? decimalPart = parts.length > 1 ? parts[1] : null;
+
+    // Format the integer part with commas
+    if (integerPart.isNotEmpty) {
+      final number = int.tryParse(integerPart);
+      if (number != null) {
+        integerPart = NumberFormat('#,###').format(number);
+      }
+    }
+
+    // Reconstruct the text
+    String formattedText = integerPart;
+    if (decimalPart != null) {
+      formattedText += '.$decimalPart';
+    } else if (newValue.text.endsWith('.')) {
+      formattedText += '.';
+    }
+
+    // Calculate new cursor position
+    int selectionIndex = formattedText.length;
+    if (newValue.selection.baseOffset < newValue.text.length) {
+      // If cursor is not at the end, try to maintain relative position
+      selectionIndex = newValue.selection.baseOffset;
+      // Adjust for added/removed commas
+      final oldCommas = oldValue.text.substring(0, oldValue.selection.baseOffset).replaceAll(RegExp(r'[^\,]'), '').length;
+      final newCommas = formattedText.substring(0, selectionIndex.clamp(0, formattedText.length)).replaceAll(RegExp(r'[^\,]'), '').length;
+      selectionIndex += (newCommas - oldCommas);
+    }
+
+    return TextEditingValue(
+      text: formattedText,
+      selection: TextSelection.collapsed(
+        offset: selectionIndex.clamp(0, formattedText.length),
+      ),
+    );
   }
 }

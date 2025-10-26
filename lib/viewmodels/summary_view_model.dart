@@ -33,6 +33,18 @@ class SummaryViewModel extends ChangeNotifier {
       endDate     : _filter.endDate,
     );
 
+    // Load category data for the current month
+    final now = DateTime.now();
+    final monthStart = DateTime(now.year, now.month, 1);
+    final monthEnd = DateTime(now.year, now.month + 1, 0);
+    final monthStartStr = monthStart.toString().substring(0, 10);
+    final monthEndStr = monthEnd.toString().substring(0, 10);
+
+    await loadCategoryTotalsForMonth(
+      monthStart: monthStartStr,
+      monthEnd: monthEndStr,
+    );
+
     _loading = false; notifyListeners();
   }
 

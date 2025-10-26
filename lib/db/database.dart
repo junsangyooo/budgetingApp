@@ -21,8 +21,8 @@ class DatabaseHelper {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, filePath);
     return await openDatabase(
-      path, 
-      version: 2,
+      path,
+      version: 4,
       onConfigure: (db) async {
         await db.execute('PRAGMA foreign_keys = ON');
       },
@@ -70,11 +70,30 @@ class DatabaseHelper {
     )
     ''');
 
+    // subscriptions table
+    await db.execute('''
+      CREATE TABLE subscriptions(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        amount REAL NOT NULL,
+        accountId INTEGER NOT NULL,
+        startDate TEXT NOT NULL,
+        endDate TEXT,
+        frequency TEXT NOT NULL DEFAULT 'monthly',
+        payingDate INTEGER NOT NULL,
+        lastCreatedDate TEXT,
+        FOREIGN KEY(accountId) REFERENCES accounts(id)
+          ON DELETE CASCADE ON UPDATE CASCADE
+      )
+    ''');
+
     // Indexes for performance
     await db.execute('CREATE INDEX IF NOT EXISTS idx_tx_date ON transactions(date)');
     await db.execute('CREATE INDEX IF NOT EXISTS idx_tx_account ON transactions(accountId)');
     await db.execute('CREATE INDEX IF NOT EXISTS idx_tx_category ON transactions(category)');
     await db.execute('CREATE INDEX IF NOT EXISTS idx_acct_currency ON accounts(currencyCode)');
+    await db.execute('CREATE INDEX IF NOT EXISTS idx_sub_account ON subscriptions(accountId)');
+    await db.execute('CREATE INDEX IF NOT EXISTS idx_sub_date ON subscriptions(startDate)');
   }
 
   Future _onUpgrade(Database db, int oldVersion, int newVersion) async {
@@ -83,6 +102,28 @@ class DatabaseHelper {
       await db.execute('DROP TABLE IF EXISTS accounts');
       await db.execute('DROP TABLE IF EXISTS currencies');
       await _createDB(db, newVersion);
+    } else if (oldVersion < 3) {
+      // Create subscriptions table for migration from v2 to v3
+      await db.execute('''
+        CREATE TABLE subscriptions(
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          name TEXT NOT NULL,
+          amount REAL NOT NULL,
+          accountId INTEGER NOT NULL,
+          startDate TEXT NOT NULL,
+          endDate TEXT,
+          frequency TEXT NOT NULL DEFAULT 'monthly',
+          payingDate INTEGER NOT NULL,
+          lastCreatedDate TEXT,
+          FOREIGN KEY(accountId) REFERENCES accounts(id)
+            ON DELETE CASCADE ON UPDATE CASCADE
+        )
+      ''');
+      await db.execute('CREATE INDEX IF NOT EXISTS idx_sub_account ON subscriptions(accountId)');
+      await db.execute('CREATE INDEX IF NOT EXISTS idx_sub_date ON subscriptions(startDate)');
+    } else if (oldVersion < 4) {
+      // Add lastCreatedDate column for migration from v3 to v4
+      await db.execute('ALTER TABLE subscriptions ADD COLUMN lastCreatedDate TEXT');
     }
   }
 
@@ -419,7 +460,7 @@ class DatabaseHelper {
     if (endDate != null)      { where.add('t.date <= ?');     args.add(endDate); }
 
     final sql = '''
-      SELECT 
+      SELECT
         CAST(strftime('%Y', t.date) AS INTEGER) AS year,
         CAST(strftime('%m', t.date) AS INTEGER) AS month,
         IFNULL(SUM(CASE WHEN t.type=1 THEN t.amount END),0) AS income,
@@ -430,5 +471,57 @@ class DatabaseHelper {
       ORDER BY year, month
     ''';
     return await db.rawQuery(sql, args);
+  }
+
+  // ---------------------------------------------------------------------------
+  // Subscriptions - CRUD
+  // ---------------------------------------------------------------------------
+
+  Future<int> insertSubscription(Map<String, dynamic> row) async {
+    final db = await instance.database;
+    return await db.insert('subscriptions', row);
+  }
+
+  Future<int> updateSubscription(int id, Map<String, dynamic> row) async {
+    final db = await instance.database;
+    return await db.update('subscriptions', row, where: 'id = ?', whereArgs: [id]);
+  }
+
+  Future<int> deleteSubscription(int id) async {
+    final db = await instance.database;
+    return await db.delete('subscriptions', where: 'id = ?', whereArgs: [id]);
+  }
+
+  Future<List<Map<String, dynamic>>> getAllSubscriptions() async {
+    final db = await instance.database;
+    return await db.query('subscriptions', orderBy: 'startDate DESC');
+  }
+
+  Future<List<Map<String, dynamic>>> getSubscriptionsByAccount(int accountId) async {
+    final db = await instance.database;
+    return await db.query('subscriptions',
+        where: 'accountId = ?', whereArgs: [accountId], orderBy: 'startDate DESC');
+  }
+
+  Future<Map<String, dynamic>?> getSubscriptionById(int id) async {
+    final db = await instance.database;
+    final results = await db.query('subscriptions', where: 'id = ?', whereArgs: [id]);
+    return results.isNotEmpty ? results.first : null;
+  }
+
+  /// Get subscriptions that are due today or in the past and haven't ended
+  Future<List<Map<String, dynamic>>> getDueSubscriptions() async {
+    final db = await instance.database;
+    final today = DateTime.now().toString().substring(0, 10);
+    return await db.query('subscriptions',
+        where: 'startDate <= ? AND (endDate IS NULL OR endDate >= ?)',
+        whereArgs: [today, today]);
+  }
+
+  /// Update lastCreatedDate for a subscription
+  Future<int> updateSubscriptionLastCreatedDate(int id, String date) async {
+    final db = await instance.database;
+    return await db.update('subscriptions', {'lastCreatedDate': date},
+        where: 'id = ?', whereArgs: [id]);
   }
 }

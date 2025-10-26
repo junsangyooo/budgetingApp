@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:budgeting/viewmodels/home_view_model.dart';
 import 'package:budgeting/generated/app_localizations.dart';
+import 'package:intl/intl.dart';
 
 class SummaryChart extends StatelessWidget {
   const SummaryChart({super.key});
@@ -26,31 +27,19 @@ class SummaryChart extends StatelessWidget {
           alignment: BarChartAlignment.spaceAround,
           maxY: _calculateMaxY(viewModel),
           barTouchData: BarTouchData(
-            enabled: true,
+            enabled: false,
             touchTooltipData: BarTouchTooltipData(
-              tooltipBgColor: Colors.blueGrey,
-              tooltipPadding: const EdgeInsets.all(8),
-              tooltipMargin: 8,
+              tooltipBgColor: Colors.transparent,
+              tooltipPadding: const EdgeInsets.all(2),
+              tooltipMargin: 4,
               getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                String label;
-                switch (group.x.toInt()) {
-                  case 0:
-                    label = l10n.income;
-                    break;
-                  case 1:
-                    label = l10n.expense;
-                    break;
-                  case 2:
-                    label = l10n.balance;
-                    break;
-                  default:
-                    label = '';
-                }
+                final formatter = NumberFormat('#,###');
                 return BarTooltipItem(
-                  '$label\n${rod.toY.toStringAsFixed(2)}',
+                  formatter.format(rod.toY.toInt()),
                   const TextStyle(
-                    color: Colors.white,
+                    color: Colors.black87,
                     fontWeight: FontWeight.bold,
+                    fontSize: 11,
                   ),
                 );
               },
@@ -113,6 +102,7 @@ class SummaryChart extends StatelessWidget {
                   ),
                 ),
               ],
+              showingTooltipIndicators: [0],
             ),
             // Expense bar
             BarChartGroupData(
@@ -127,6 +117,7 @@ class SummaryChart extends StatelessWidget {
                   ),
                 ),
               ],
+              showingTooltipIndicators: [0],
             ),
             // Balance bar
             BarChartGroupData(
@@ -141,6 +132,7 @@ class SummaryChart extends StatelessWidget {
                   ),
                 ),
               ],
+              showingTooltipIndicators: [0],
             ),
           ],
         ),

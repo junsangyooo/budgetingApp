@@ -92,6 +92,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get allCategories => '모든 카테고리';
 
   @override
+  String get filter => '필터';
+
+  @override
   String get selectAccountOrCurrency => '계좌 또는 통화 선택';
 
   @override
@@ -240,4 +243,185 @@ class AppLocalizationsKo extends AppLocalizations {
   String accountLabel(int id) {
     return '계좌: #$id';
   }
+
+  @override
+  String get currency_USD => '미국 달러';
+
+  @override
+  String get currency_EUR => '유로';
+
+  @override
+  String get currency_GBP => '영국 파운드';
+
+  @override
+  String get currency_JPY => '일본 엔';
+
+  @override
+  String get currency_CNY => '중국 위안';
+
+  @override
+  String get currency_KRW => '원';
+
+  @override
+  String get currency_CAD => '캐나다 달러';
+
+  @override
+  String get currency_AUD => '호주 달러';
+
+  @override
+  String get currency_CHF => '스위스 프랑';
+
+  @override
+  String get currency_HKD => '홍콩 달러';
+
+  @override
+  String get currency_SGD => '싱가포르 달러';
+
+  @override
+  String get currency_NZD => '뉴질랜드 달러';
+
+  @override
+  String get navHome => '홈';
+
+  @override
+  String get navSummary => '요약';
+
+  @override
+  String get navSettings => '설정';
+
+  @override
+  String get settings => '설정';
+
+  @override
+  String get language => '언어';
+
+  @override
+  String get selectLanguage => '언어 선택';
+
+  @override
+  String get subscriptions => '구독';
+
+  @override
+  String get addSubscription => '구독 추가';
+
+  @override
+  String get subscriptionName => '구독 이름';
+
+  @override
+  String get subscriptionAmount => '금액';
+
+  @override
+  String get subscriptionAccount => '계좌';
+
+  @override
+  String get subscriptionStartDate => '시작 날짜';
+
+  @override
+  String get subscriptionEndDate => '종료 날짜 (선택사항)';
+
+  @override
+  String get subscriptionPayingDate => '결제 날짜';
+
+  @override
+  String get subscriptionFrequency => '주기';
+
+  @override
+  String get deleteSubscription => '구독 삭제';
+
+  @override
+  String deleteSubscriptionConfirm(String name) {
+    return '구독 \"$name\"을(를) 삭제하시겠습니까?';
+  }
+
+  @override
+  String get subscriptionAdded => '구독이 성공적으로 추가되었습니다';
+
+  @override
+  String get subscriptionUpdated => '구독이 성공적으로 수정되었습니다';
+
+  @override
+  String get subscriptionDeleted => '구독이 성공적으로 삭제되었습니다';
+
+  @override
+  String get noSubscriptions => '구독 없음';
+
+  @override
+  String get monthly => '월간';
+
+  @override
+  String get pleaseEnterSubscriptionName => '구독 이름을 입력하세요';
+
+  @override
+  String get pleaseEnterSubscriptionAmount => '금액을 입력하세요';
+
+  @override
+  String get pleaseSelectSubscriptionAccount => '계좌를 선택하세요';
+
+  @override
+  String get categories => '카테고리';
+
+  @override
+  String get manageCategories => '카테고리 관리';
+
+  @override
+  String get addCategory => '카테고리 추가';
+
+  @override
+  String get categoryName => '카테고리 이름';
+
+  @override
+  String get newAccountTitle => '새 계좌';
+
+  @override
+  String get addNewAccount => '새 계좌 추가';
+
+  @override
+  String get deleteAccount => '계좌 삭제';
+
+  @override
+  String deleteAccountConfirm(String name) {
+    return '계좌 \"$name\"을(를) 삭제하시겠습니까? 관련된 모든 거래가 삭제됩니다.';
+  }
+
+  @override
+  String get accountDeleted => '계좌가 성공적으로 삭제되었습니다';
+
+  @override
+  String get accountAdded => '계좌가 성공적으로 추가되었습니다';
+
+  @override
+  String get categoryAdded => '카테고리가 성공적으로 추가되었습니다';
+
+  @override
+  String get categoryDeleted => '카테고리가 성공적으로 삭제되었습니다';
+
+  @override
+  String get pleaseEnterCategoryName => '카테고리 이름을 입력하세요';
+
+  @override
+  String get editCategory => '카테고리 수정';
+
+  @override
+  String get categoryUpdated => '카테고리가 성공적으로 수정되었습니다';
+
+  @override
+  String get summary => '요약';
+
+  @override
+  String get monthlyNetStats => '월별 순이익 통계';
+
+  @override
+  String get categoryBreakdown => '카테고리별 분석';
+
+  @override
+  String get selectCategories => '카테고리 선택';
+
+  @override
+  String get selectAccountOrCurrencyForChart => '계좌 또는 통화 선택';
+
+  @override
+  String get noData => '사용 가능한 데이터가 없습니다';
+
+  @override
+  String get all => '전체';
 }
