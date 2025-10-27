@@ -172,6 +172,16 @@ class _TransactionDialogState extends State<TransactionDialog> {
                     setState(() {
                       _selectedCategory = value;
                     });
+
+                    // Show message if subscription category is selected
+                    if (value == M.Category.subscription) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(l10n.subscriptionInfoMessage),
+                          duration: const Duration(seconds: 3),
+                        ),
+                      );
+                    }
                   }
                 },
               ),

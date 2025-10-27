@@ -424,4 +424,19 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get all => '전체';
+
+  @override
+  String get subscriptionFrequencyMonthly => '매월';
+
+  @override
+  String get subscriptionFrequencyYearly => '매년';
+
+  @override
+  String get subscriptionFrequencyCustom => '사용자 지정';
+
+  @override
+  String get subscriptionCustomInterval => '매 (개월)';
+
+  @override
+  String get subscriptionInfoMessage => '구독 결제를 관리하려면 설정 → 구독을 사용하세요';
 }

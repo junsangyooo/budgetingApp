@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 import 'package:budgeting/providers/locale_provider.dart';
 import 'package:budgeting/db/database.dart';
 import 'package:budgeting/models/account.dart';
 import 'package:budgeting/models/subscription.dart';
 import 'package:budgeting/utils/currency_data.dart';
+import 'package:budgeting/viewmodels/home_view_model.dart';
+import 'package:budgeting/viewmodels/summary_view_model.dart';
 import 'package:budgeting/generated/app_localizations.dart';
 
 class SettingScreen extends StatefulWidget {
@@ -48,6 +52,19 @@ class _SettingScreenState extends State<SettingScreen>
     setState(() {
       _subscriptions = subscriptionMaps.map((map) => Subscription.fromMap(map)).toList();
     });
+  }
+
+  /// Generate a human-readable frequency description for a subscription
+  String _getFrequencyDescription(String frequency) {
+    if (frequency == 'monthly') {
+      return 'month';
+    } else if (frequency == 'yearly') {
+      return 'year';
+    } else if (frequency.startsWith('custom:')) {
+      final months = frequency.split(':')[1];
+      return '$months months';
+    }
+    return 'month';
   }
 
   @override
@@ -244,9 +261,21 @@ class _SettingScreenState extends State<SettingScreen>
     final amountController = TextEditingController(
       text: subscription?.amount.toString() ?? '',
     );
-    final payingDateController = TextEditingController(
-      text: subscription?.payingDate.toString() ?? '',
-    );
+
+    // Parse frequency from subscription or use default
+    String selectedFrequency = 'monthly';
+    int customInterval = 3;
+
+    if (subscription != null) {
+      final freq = subscription.frequency;
+      if (freq.startsWith('custom:')) {
+        selectedFrequency = 'custom';
+        customInterval = int.tryParse(freq.split(':')[1]) ?? 3;
+      } else {
+        selectedFrequency = freq;
+      }
+    }
+
     DateTime? selectedStartDate = subscription?.startDate ?? DateTime.now();
     DateTime? selectedEndDate = subscription?.endDate;
     int? selectedAccountId = subscription?.accountId;
@@ -262,6 +291,7 @@ class _SettingScreenState extends State<SettingScreen>
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+                // Subscription Name
                 TextField(
                   controller: nameController,
                   decoration: InputDecoration(
@@ -271,9 +301,14 @@ class _SettingScreenState extends State<SettingScreen>
                   ),
                 ),
                 const SizedBox(height: 16),
+
+                // Amount (numeric only)
                 TextField(
                   controller: amountController,
                   keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
+                  ],
                   decoration: InputDecoration(
                     labelText: l10n.subscriptionAmount,
                     hintText: '0.00',
@@ -281,6 +316,8 @@ class _SettingScreenState extends State<SettingScreen>
                   ),
                 ),
                 const SizedBox(height: 16),
+
+                // Account Selection
                 DropdownButtonFormField<int>(
                   initialValue: selectedAccountId,
                   decoration: InputDecoration(
@@ -300,13 +337,136 @@ class _SettingScreenState extends State<SettingScreen>
                   },
                 ),
                 const SizedBox(height: 16),
-                TextField(
-                  controller: payingDateController,
-                  keyboardType: TextInputType.number,
+
+                // Start Date Picker
+                GestureDetector(
+                  onTap: () async {
+                    final picked = await showDatePicker(
+                      context: dialogContext,
+                      initialDate: selectedStartDate ?? DateTime.now(),
+                      firstDate: DateTime(2000),
+                      lastDate: DateTime(2100),
+                    );
+                    if (picked != null) {
+                      setState(() {
+                        selectedStartDate = picked;
+                      });
+                    }
+                  },
+                  child: InputDecorator(
+                    decoration: InputDecoration(
+                      labelText: l10n.subscriptionStartDate,
+                      border: const OutlineInputBorder(),
+                      suffixIcon: const Icon(Icons.calendar_today),
+                    ),
+                    child: Text(
+                      selectedStartDate != null
+                          ? '${selectedStartDate!.year}-${selectedStartDate!.month.toString().padLeft(2, '0')}-${selectedStartDate!.day.toString().padLeft(2, '0')}'
+                          : 'Select date',
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+
+                // Frequency Selection
+                DropdownButtonFormField<String>(
+                  initialValue: selectedFrequency,
                   decoration: InputDecoration(
-                    labelText: l10n.subscriptionPayingDate,
-                    hintText: '1-31',
+                    labelText: l10n.subscriptionFrequency,
                     border: const OutlineInputBorder(),
+                  ),
+                  items: [
+                    DropdownMenuItem(
+                      value: 'monthly',
+                      child: Text(l10n.subscriptionFrequencyMonthly),
+                    ),
+                    DropdownMenuItem(
+                      value: 'yearly',
+                      child: Text(l10n.subscriptionFrequencyYearly),
+                    ),
+                    DropdownMenuItem(
+                      value: 'custom',
+                      child: Text(l10n.subscriptionFrequencyCustom),
+                    ),
+                  ],
+                  onChanged: (value) {
+                    setState(() {
+                      selectedFrequency = value ?? 'monthly';
+                    });
+                  },
+                ),
+                const SizedBox(height: 16),
+
+                // Custom Interval Input (only if Custom is selected)
+                if (selectedFrequency == 'custom')
+                  TextField(
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                    ],
+                    controller: TextEditingController(text: customInterval.toString()),
+                    decoration: InputDecoration(
+                      labelText: l10n.subscriptionCustomInterval,
+                      hintText: '3',
+                      border: const OutlineInputBorder(),
+                    ),
+                    onChanged: (value) {
+                      customInterval = int.tryParse(value) ?? 3;
+                    },
+                  ),
+
+                if (selectedFrequency == 'custom')
+                  const SizedBox(height: 16),
+
+                // End Date Picker (Optional)
+                GestureDetector(
+                  onTap: () async {
+                    final picked = await showDatePicker(
+                      context: dialogContext,
+                      initialDate: selectedEndDate ?? selectedStartDate ?? DateTime.now(),
+                      firstDate: DateTime(2000),
+                      lastDate: DateTime(2100),
+                    );
+                    if (picked != null) {
+                      setState(() {
+                        selectedEndDate = picked;
+                      });
+                    }
+                  },
+                  child: InputDecorator(
+                    decoration: InputDecoration(
+                      labelText: l10n.subscriptionEndDate,
+                      border: const OutlineInputBorder(),
+                      suffixIcon: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          if (selectedEndDate != null)
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  selectedEndDate = null;
+                                });
+                              },
+                              child: const Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 8),
+                                child: Icon(Icons.clear, size: 20),
+                              ),
+                            ),
+                          const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 12),
+                            child: Icon(Icons.calendar_today),
+                          ),
+                        ],
+                      ),
+                    ),
+                    child: Text(
+                      selectedEndDate != null
+                          ? '${selectedEndDate!.year}-${selectedEndDate!.month.toString().padLeft(2, '0')}-${selectedEndDate!.day.toString().padLeft(2, '0')}'
+                          : 'Optional',
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
                   ),
                 ),
               ],
@@ -346,20 +506,18 @@ class _SettingScreenState extends State<SettingScreen>
                   return;
                 }
 
-                if (payingDateController.text.isEmpty) {
-                  if (mounted && dialogContext.mounted) {
-                    ScaffoldMessenger.of(dialogContext).showSnackBar(
-                      SnackBar(content: Text(l10n.subscriptionPayingDate)),
-                    );
-                  }
-                  return;
-                }
-
                 try {
-                  final payingDate = int.parse(payingDateController.text);
-                  if (payingDate < 1 || payingDate > 31) {
-                    throw Exception('Day must be between 1 and 31');
+                  // Build frequency string
+                  String frequencyString = selectedFrequency;
+                  if (selectedFrequency == 'custom') {
+                    if (customInterval < 1) {
+                      throw Exception('Custom interval must be at least 1 month');
+                    }
+                    frequencyString = 'custom:$customInterval';
                   }
+
+                  // For monthly subscriptions, use day of start date
+                  int payingDate = selectedStartDate!.day;
 
                   final newSubscription = Subscription(
                     id: subscription?.id,
@@ -368,22 +526,44 @@ class _SettingScreenState extends State<SettingScreen>
                     accountId: selectedAccountId!,
                     startDate: selectedStartDate!,
                     endDate: selectedEndDate,
+                    frequency: frequencyString,
                     payingDate: payingDate,
                   );
 
-                  if (subscription == null) {
+                  final isNewSubscription = subscription == null;
+
+                  if (isNewSubscription) {
                     await _db.insertSubscription(newSubscription.toMap());
+
+                    // Create initial transaction on start date
+                    await _createInitialSubscriptionTransaction(newSubscription);
                   } else {
                     await _db.updateSubscription(subscription.id!, newSubscription.toMap());
                   }
 
                   await _loadSubscriptions();
 
+                  // Refresh home and summary screens if this is a new subscription
+                  if (isNewSubscription && mounted && dialogContext.mounted) {
+                    try {
+                      final homeViewModel = dialogContext.read<HomeViewModel>();
+                      await homeViewModel.load();
+                    } catch (e) {
+                      // HomeViewModel might not be available in context
+                    }
+                    try {
+                      final summaryViewModel = dialogContext.read<SummaryViewModel>();
+                      await summaryViewModel.load();
+                    } catch (e) {
+                      // SummaryViewModel might not be available in context
+                    }
+                  }
+
                   if (mounted && dialogContext.mounted) {
                     ScaffoldMessenger.of(dialogContext).showSnackBar(
                       SnackBar(
                         content: Text(
-                          subscription == null
+                          isNewSubscription
                               ? l10n.subscriptionAdded
                               : l10n.subscriptionUpdated,
                         ),
@@ -408,6 +588,35 @@ class _SettingScreenState extends State<SettingScreen>
         ),
       ),
     );
+  }
+
+  /// Create an initial transaction for a new subscription on its start date
+  Future<void> _createInitialSubscriptionTransaction(Subscription subscription) async {
+    try {
+      final frequencyDesc = _getFrequencyDescription(subscription.frequency);
+      final transactionDate = subscription.startDate.toString().substring(0, 10);
+      final transactionData = {
+        'id': const Uuid().v4(),
+        'title': 'Subscription: ${subscription.name}',
+        'amount': subscription.amount,
+        'type': 0, // 0 = expense
+        'date': transactionDate,
+        'accountId': subscription.accountId,
+        'category': 'subscription',
+        'note': 'Subscription: ${subscription.name}\nPayment: Every $frequencyDesc',
+        'recurring': null,
+      };
+
+      await _db.insertTransaction(transactionData);
+
+      // Set lastCreatedDate to prevent SubscriptionService from creating duplicate
+      // transaction on the same date
+      if (subscription.id != null) {
+        await _db.updateSubscriptionLastCreatedDate(subscription.id!, transactionDate);
+      }
+    } catch (e) {
+      print('Error creating initial subscription transaction: $e');
+    }
   }
 
   void _showDeleteSubscriptionDialog(
@@ -514,7 +723,9 @@ class _SettingScreenState extends State<SettingScreen>
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: ListTile(
         title: Text(account.name),
-        subtitle: Text('${currency.symbol} ${currency.code}'),
+        subtitle: Text(
+          '${currency.symbol} ${currency.code} • Balance: ${currency.symbol}${account.balance.toStringAsFixed(2)}',
+        ),
         trailing: PopupMenuButton(
           itemBuilder: (context) => [
             PopupMenuItem(
@@ -539,6 +750,7 @@ class _SettingScreenState extends State<SettingScreen>
 
   void _showAddAccountDialog(BuildContext context, AppLocalizations l10n) {
     final nameController = TextEditingController();
+    final balanceController = TextEditingController();
     String? selectedCurrency;
 
     showDialog(
@@ -576,6 +788,19 @@ class _SettingScreenState extends State<SettingScreen>
                       selectedCurrency = value;
                     });
                   },
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: balanceController,
+                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
+                  ],
+                  decoration: InputDecoration(
+                    labelText: l10n.initialBalance,
+                    hintText: '0.00',
+                    border: const OutlineInputBorder(),
+                  ),
                 ),
               ],
             ),
@@ -624,10 +849,15 @@ class _SettingScreenState extends State<SettingScreen>
 
                 // Add account
                 try {
+                  double balance = 0.0;
+                  if (balanceController.text.isNotEmpty) {
+                    balance = double.parse(balanceController.text);
+                  }
+
                   await _db.insertAccount({
                     'name': nameController.text,
                     'currencyCode': selectedCurrency,
-                    'balance': 0.0,
+                    'balance': balance,
                   });
 
                   await _loadAccounts();

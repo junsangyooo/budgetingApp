@@ -1,134 +1,187 @@
-# Multi-Currency Budgeting App
+# 💰 Multi-Currency Budgeting App
 
-A Flutter-based personal finance management application that enables users to track income and expenses across multiple currencies and accounts with powerful filtering and analytics capabilities.
+A powerful Flutter-based personal finance management application for tracking income and expenses across multiple currencies, accounts, and categories with advanced analytics and automation features.
 
-## Overview
+**Languages:** English 🇬🇧 | Korean 🇰🇷
 
-This budgeting application helps you manage your finances by:
-- Tracking transactions (income and expenses) across multiple bank accounts
-- Supporting multiple currencies simultaneously
-- Providing detailed filtering options by currency, account, period, and category
-- Visualizing financial data with charts and summaries
-- Managing recurring transactions and payment tracking
+---
 
-## Features
+## 📋 Overview
 
-### Core Functionality
+This budgeting application helps you manage your finances efficiently by:
 
-#### 1. **Multi-Currency Support**
-- Add and manage multiple currencies (USD, CAD, KRW, etc.)
-- Each account is linked to a specific currency
-- Filter transactions by currency to see all accounts in that currency
-- Currency-specific balance calculations
+- 📊 Tracking transactions (income & expenses) across multiple accounts
+- 💱 Supporting multiple currencies simultaneously
+- 📈 Visualizing financial data with charts (monthly bar chart, category pie chart)
+- 🎯 Filtering by currency, account, period, and category
+- 🔄 Managing subscriptions with automatic transaction generation
+- ⚙️ Customizing accounts and settings
 
-#### 2. **Account Management**
-- Create multiple accounts per currency
-- Track individual account balances
-- View computed balances based on transaction history
-- Automatic balance updates with new transactions
+---
 
-#### 3. **Transaction Tracking**
-- **Income & Expense Categories:**
-  - Income (salary, interest, refunds, etc.)
-  - Food (groceries)
-  - Dining (restaurants)
-  - Drinks (cafes, beverages)
-  - Transportation (public transport, fuel)
-  - Housing (rent, utilities)
-  - Subscriptions (Netflix, etc.)
-  - Shopping (lifestyle goods)
-  - Health (medical, insurance)
-  - Education (courses, books)
-  - Entertainment (movies, hobbies)
-  - Gifts (donations)
-  - Investment (savings)
-  - Others (miscellaneous)
+## ✨ Features
 
-- **Transaction Features:**
-  - Add, edit, and delete transactions
+### 🏠 Home Screen - Transaction Management
+
+- **Transaction CRUD Operations**
+  - Add, edit, delete transactions with full details
   - Attach notes to transactions
-  - Set transaction dates
+  - Set custom transaction dates
   - Support for recurring transactions
 
-#### 4. **Advanced Filtering**
-The home screen provides four powerful filters:
+- **Advanced Filtering**
+  - Filter by currency (view all accounts in a currency)
+  - Filter by specific account
+  - Filter by period (All Time, Today, This Week, This Month, This Year, Custom Date Range)
+  - Filter by category (multi-select)
+  - Combine multiple filters for precise results
 
-- **Currency Filter:** View all transactions in a specific currency across all accounts
-- **Account Filter:** View transactions for a specific account
-- **Period Filter:**
-  - All Time
-  - Today
-  - This Week
-  - This Month
-  - This Year
-  - Custom Date Range
-- **Category Filter:** Filter by any transaction category
+- **Real-Time Summary Chart**
+  - Green bar: Total income
+  - Red bar: Total expenses
+  - Blue/Orange bar: Net balance (positive/negative)
+  - Updates dynamically with active filters
 
-**Special Case:** When currency is specified but account is not, the app shows all transactions from all accounts using that currency.
+- **Transaction List**
+  - Chronologically sorted (newest first)
+  - Category icons and color coding
+  - Quick edit/delete buttons
+  - Account and currency display
 
-#### 5. **Summary & Analytics**
-- Real-time bar chart showing:
-  - Total Income (green bar)
-  - Total Expense (red bar)
-  - Balance/Net (blue/orange bar)
-- All summaries respect active filters
-- Monthly income/expense tracking
-- Category-based expense analysis
-- Exportable data for further analysis
+### 📊 Summary Screen - Analytics & Insights
 
-#### 6. **User Interface**
-- **Onboarding Flow:** First-time setup with language selection and initial account creation
-- **Bottom Navigation:**
-  - Home: Transaction list with filters and summary
-  - Summary: Detailed analytics and charts (in development)
-  - Settings: App preferences and configuration (in development)
-- **Transaction Management:**
-  - Tap to edit transactions
-  - Edit/Delete buttons on each transaction card
-  - Confirmation dialogs for destructive actions
-- **FloatingActionButton:** Quick access to add new transactions
+- **Monthly Net Stats**
+  - Bar chart showing 12 months of income vs. expenses
+  - Smart month range (current month only if no history, January to current if data exists)
+  - Y-axis with formatted amounts (k, M notation)
+  - Locale-aware month labels (English: Jan, Feb; Korean: 1월, 2월)
+  - Account/currency filter integration
 
-## Technology Stack
+- **Category Breakdown**
+  - Pie chart showing expense distribution by category
+  - Expandable period filter (1 Day, 1 Week, 1 Month, 3 Months, 6 Months, 12 Months)
+  - Expandable category filter (multi-select)
+  - Color-coded categories
+  - Legend with percentage breakdown
+  - Filters appear between Monthly Stats and Category Breakdown
+
+- **Overall Filter Bar**
+  - Top-level account/currency filter affecting all charts
+  - Matches home screen filter behavior
+
+### ⚙️ Settings Screen - Configuration & Management
+
+#### 1. Subscriptions Tab
+- **Add Subscriptions**
+  - Subscription name
+  - Amount (numeric only)
+  - Paying account (dropdown)
+  - Paying date (day of month, 1-31)
+  - Optional end date
+
+- **Subscription Management**
+  - View all active subscriptions
+  - Edit existing subscriptions
+  - Delete subscriptions with confirmation
+  - Auto-transaction creation on subscription due date
+
+- **Auto-Transaction Features**
+  - Automatically creates expense transactions on paying date
+  - Prevents duplicate daily transactions using `lastCreatedDate` tracking
+  - Transaction categorized as "subscription"
+  - Respects subscription start/end dates
+
+#### 2. Accounts Tab
+- **View All Accounts**
+  - Account name and balance display
+  - Currency symbol and code
+  - Account balance shown in subtitle
+
+- **Create New Account**
+  - Account name (required)
+  - Currency selection (required)
+  - Initial balance (numeric, optional, defaults to 0.00)
+  - Automatic balance updates with transactions
+
+- **Account Management**
+  - Delete accounts (with confirmation)
+  - Balances update based on transaction history
+
+#### 3. Language Tab
+- **Bilingual Support**
+  - English (English)
+  - Korean (한국어)
+  - Change language with instant app refresh
+  - All content includes both languages
+
+---
+
+## 🗂️ Technology Stack
 
 ### Framework & Language
 - **Flutter** (Dart 3.0+)
-- Cross-platform support: iOS, Android, macOS, Windows, Linux
+- Cross-platform: iOS, Android, macOS, Windows, Linux
 
 ### Key Dependencies
 - **State Management:** Provider (^6.1.1)
 - **Database:** SQLite via sqflite (^2.3.0)
 - **Charts:** FL Chart (^0.66.0)
-- **Localization:** Flutter Localizations (built-in)
-- **Date/Time:** intl (^0.20.2)
+- **Localization:** Flutter Localizations + intl (^0.20.2)
 - **UUID Generation:** uuid (^4.2.2)
-- **Local Storage:** shared_preferences (^2.5.3)
+- **Utilities:** shared_preferences (^2.5.3)
 
 ### Architecture
 
 #### MVVM Pattern
 ```
 lib/
-├── models/           # Data models (Transaction, Account, Currency, FilterState)
-├── viewmodels/       # Business logic (HomeViewModel, SummaryViewModel)
-├── screens/          # UI screens (OnboardingScreen, HomeScreen, MainNavigation)
-├── widgets/          # Reusable UI components
-├── db/               # Database layer (DatabaseHelper)
-├── repositories/     # Data access layer (TransactionRepository)
-└── utils/            # Helper functions (mappers, formatters)
+├── models/
+│   ├── transaction.dart
+│   ├── account.dart
+│   ├── subscription.dart
+│   ├── filter_state.dart
+│   └── currency.dart
+├── viewmodels/
+│   ├── home_view_model.dart
+│   └── summary_view_model.dart
+├── screens/
+│   ├── home_screen.dart
+│   ├── summary_screen.dart
+│   ├── setting_screen.dart
+│   ├── main_navigation.dart
+│   └── onboarding_screen.dart
+├── widgets/
+│   ├── transaction_list.dart
+│   ├── transaction_dialog.dart
+│   ├── filter_bar.dart
+│   ├── summary_chart.dart
+│   ├── monthly_chart.dart
+│   └── category_pie_chart.dart
+├── db/
+│   └── database.dart
+├── repositories/
+│   └── transaction_repository.dart
+├── utils/
+│   ├── currency_data.dart
+│   ├── mappers.dart
+│   └── subscription_service.dart
+└── l10n/
+    ├── app_en.arb
+    └── app_ko.arb
 ```
 
-#### Database Schema
+#### Database Schema (Version 4)
 
-**Currencies Table:**
+**Currencies Table**
 ```sql
 CREATE TABLE currencies(
-  code TEXT PRIMARY KEY,      -- e.g., 'USD', 'CAD', 'KRW'
-  symbol TEXT,                -- e.g., '$', '₩'
-  name TEXT                   -- e.g., 'US Dollar'
+  code TEXT PRIMARY KEY,
+  symbol TEXT,
+  name TEXT
 )
 ```
 
-**Accounts Table:**
+**Accounts Table**
 ```sql
 CREATE TABLE accounts(
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -139,179 +192,218 @@ CREATE TABLE accounts(
 )
 ```
 
-**Transactions Table:**
+**Transactions Table**
 ```sql
 CREATE TABLE transactions(
-  id TEXT PRIMARY KEY,        -- UUID v4
+  id TEXT PRIMARY KEY,          -- UUID v4
   title TEXT,
   amount REAL,
-  type INTEGER,              -- 1 = income, 0 = expense
-  date TEXT,                 -- 'YYYY-MM-DD'
+  type INTEGER,                 -- 1 = income, 0 = expense
+  date TEXT,                    -- 'YYYY-MM-DD'
   accountId INTEGER,
-  category TEXT,             -- enum.name
+  category TEXT,
   note TEXT,
-  recurring TEXT,            -- JSON string for recurring config
+  recurring TEXT,               -- JSON string
   FOREIGN KEY(accountId) REFERENCES accounts(id) ON DELETE CASCADE
 )
 ```
 
-## Getting Started
+**Subscriptions Table**
+```sql
+CREATE TABLE subscriptions(
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT NOT NULL,
+  amount REAL NOT NULL,
+  accountId INTEGER NOT NULL,
+  startDate TEXT NOT NULL,
+  endDate TEXT,
+  frequency TEXT NOT NULL,      -- 'monthly'
+  payingDate INTEGER NOT NULL,  -- 1-31
+  lastCreatedDate TEXT,         -- Prevents duplicate daily creation
+  FOREIGN KEY(accountId) REFERENCES accounts(id) ON DELETE CASCADE
+)
+```
+
+---
+
+## 🚀 Getting Started
 
 ### Prerequisites
 - Flutter SDK (>=3.0.0 <4.0.0)
 - Dart SDK
-- Android Studio / Xcode (for mobile development)
-- Visual Studio (for Windows development)
+- Xcode (for iOS development)
+- Android Studio (for Android development)
 
 ### Installation
 
-1. **Clone the repository:**
+1. **Clone the repository**
    ```bash
    git clone <repository-url>
    cd budgeting
    ```
 
-2. **Install dependencies:**
+2. **Install dependencies**
    ```bash
    flutter pub get
    ```
 
-3. **Run the app:**
+3. **Run the app**
    ```bash
    flutter run
    ```
 
 ### First-Time Setup
 
-When you first launch the app:
+1. **Language Selection** - Choose English or Korean
+2. **Currency Selection** - Select your primary currency
+3. **Create First Account** - Add your first account with optional initial balance
+4. **Start Tracking** - Begin adding transactions
 
-1. **Language Selection:** Choose between English and Korean
-2. **Currency Selection:** Select your primary currency
-3. **Create First Account:** Add your first bank account
-4. **Start Tracking:** Begin adding transactions
+---
 
-## Usage Guide
+## 📖 Usage Guide
 
 ### Adding a Transaction
 
-1. Tap the **+ button** (FloatingActionButton) on the home screen
-2. Choose transaction type: **Income** or **Expense**
-3. Fill in the details:
-   - Title (required)
-   - Amount (required)
-   - Category (required)
-   - Account (required)
+1. Tap the **+** button on the home screen
+2. Select transaction type (Income/Expense)
+3. Fill in required details:
+   - Title
+   - Amount
+   - Category
+   - Account
    - Date (defaults to today)
-   - Note (optional)
-4. Tap **Save**
+4. Add optional note
+5. Tap **Save**
 
-### Editing a Transaction
+### Editing & Deleting Transactions
 
-1. Tap on any transaction card in the list, OR
-2. Tap the **edit icon** (pencil) on the transaction card
-3. Modify the fields as needed
-4. Tap **Save**
-
-### Deleting a Transaction
-
-1. Tap the **delete icon** (trash) on the transaction card
-2. Confirm deletion in the dialog
+- **Edit:** Tap on transaction card or tap the edit icon
+- **Delete:** Tap the delete icon and confirm
 
 ### Using Filters
 
-1. **Filter by Currency:**
-   - Tap "By Currency" chip
-   - Select a currency from the list
-   - View all transactions across all accounts in that currency
+**Combine filters for precise results:**
+- Currency + Account + Period + Category
 
-2. **Filter by Account:**
-   - Tap "By Account" chip
-   - Select a specific account
-   - View transactions only for that account
+Example: "CAD + Savings Account + This Month + Food" shows all food expenses in your Savings Account for this month
 
-3. **Filter by Period:**
-   - Select a predefined period (Today, This Month, etc.), OR
-   - Choose "Custom" to set a specific date range
+### Managing Accounts
 
-4. **Filter by Category:**
-   - Tap any category chip to filter
-   - Tap "All Categories" to remove category filter
+1. Go to **Settings → Accounts**
+2. View all accounts with their balances
+3. **Add Account:**
+   - Account name
+   - Currency
+   - Initial balance (numeric only)
+4. **Delete Account:** Tap account menu → Delete
 
-5. **Combine Filters:**
-   - All filters work together
-   - Example: "CAD currency + Food category + This Month" shows all food expenses in CAD accounts this month
+### Managing Subscriptions
 
-### Understanding the Summary Chart
+1. Go to **Settings → Subscriptions**
+2. **Add Subscription:**
+   - Subscription name
+   - Amount (numeric only)
+   - Paying account
+   - Paying date (1-31)
+   - Optional end date
+3. **Edit/Delete:** Use account menu options
 
-- **Green Bar:** Total income for the filtered period/accounts
-- **Red Bar:** Total expenses for the filtered period/accounts
-- **Blue/Orange Bar:** Net balance (blue if positive, orange if negative)
-- Hover/tap bars to see exact amounts
+**Auto-Transaction Feature:**
+- On subscription due date, app automatically creates an expense transaction
+- Prevents duplicate daily creation using `lastCreatedDate` tracking
+- Transaction appears in transaction list with "Subscription: {name}" format
 
-## Project Status
+### Summary & Analytics
+
+- **Monthly Stats:** Shows 12-month income/expense trends
+- **Category Breakdown:** Pie chart with period selection (1d, 1w, 1m, 3m, 6m, 12m)
+- **Filters:** Apply account/currency filter to all charts simultaneously
+
+---
+
+## 📱 Device Installation
+
+### iOS (iPhone 16 Pro or later)
+
+1. Connect iPhone via USB
+2. Enable Developer Mode:
+   - Settings → Privacy & Security → Developer Mode → ON
+3. Trust development certificate:
+   - Settings → General → VPN & Device Management → Trust certificate
+4. Build and run:
+   ```bash
+   flutter run --release
+   ```
+
+### Android
+
+1. Connect Android device via USB
+2. Build APK:
+   ```bash
+   flutter build apk --release
+   ```
+3. Install APK on device or use:
+   ```bash
+   flutter run --release
+   ```
+
+---
+
+## ✅ Project Status
 
 ### Completed Features ✅
-- ✅ Multi-currency support
-- ✅ Account management
+- ✅ Multi-currency support with 20+ currencies
+- ✅ Account management with initial balance
 - ✅ Transaction CRUD operations
 - ✅ Advanced filtering (currency, account, period, category)
 - ✅ Home screen with transaction list
-- ✅ Summary bar chart
-- ✅ Onboarding flow
-- ✅ Database schema with foreign key constraints
-- ✅ Transaction repository pattern
+- ✅ Summary screen with monthly bar chart
+- ✅ Category breakdown pie chart
+- ✅ Subscription management
+- ✅ Auto-transaction creation for subscriptions
+- ✅ Bilingual support (English/Korean)
+- ✅ Database with proper foreign key constraints (v4)
 - ✅ State management with Provider
+- ✅ MVVM architecture
 
 ### In Development 🚧
-- 🚧 Summary screen with detailed analytics
-- 🚧 Settings screen
-- 🚧 Category pie charts
-- 🚧 Monthly trend charts
-- 🚧 Recurring transaction automation
+- 🚧 Budget limits and alerts
 - 🚧 Data export functionality
-- 🚧 Multiple language support (EN/KR)
+- 🚧 Receipt photo attachments
 
 ### Future Enhancements 💡
-- 💡 Budget limits and alerts
 - 💡 Bill reminders
-- 💡 Cloud sync
+- 💡 Cloud sync with Firebase
 - 💡 Data backup/restore
-- 💡 Receipt photo attachments
-- 💡 Multiple account transfers
 - 💡 Investment tracking
 - 💡 Debt management
 - 💡 Financial goal setting
 - 💡 Dark mode theme
+- 💡 Multiple account transfers
+- 💡 Advanced reports
 
-## Contributing
+---
 
-Contributions are welcome! Please follow these steps:
+## 🛠️ Development Notes
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+### Database Migrations
+- Current version: 4
+- Manage in `DatabaseHelper._initDB()` and `_onUpgrade()`
+- Version 4 added subscriptions table and lastCreatedDate column
 
-## Development Notes
+### Localization
+- Add strings to `lib/l10n/app_en.arb` and `lib/l10n/app_ko.arb`
+- Regenerate: `flutter gen-l10n`
 
 ### Code Style
 - Follow Dart/Flutter style guide
-- Use meaningful variable and function names
+- Use meaningful variable names
 - Add comments for complex logic
 - Keep functions small and focused
 
-### Database Migrations
-- Version is managed in `DatabaseHelper._initDB()`
-- Current version: 2
-- To add migrations, update `_onUpgrade()` method
-
-### Adding New Categories
-1. Add to `Category` enum in `lib/models/transaction.dart`
-2. Update category icon mapping in `TransactionListItem`
-3. Update category color mapping in `TransactionListItem`
-
 ### Testing
+
 ```bash
 # Run all tests
 flutter test
@@ -320,37 +412,46 @@ flutter test
 flutter test --coverage
 ```
 
-## Troubleshooting
+---
+
+## 🐛 Troubleshooting
 
 ### Common Issues
 
-**Issue:** App crashes on first launch
-- **Solution:** Ensure database is properly initialized. Check `DatabaseHelper.instance`
+**App crashes on first launch**
+- Solution: Ensure database is properly initialized
 
-**Issue:** Transactions not appearing after adding
-- **Solution:** Verify account exists and filters are not hiding the transaction
+**Transactions not appearing**
+- Solution: Check filters aren't hiding transactions
 
-**Issue:** Foreign key constraint errors
-- **Solution:** Ensure currency exists before creating accounts, and account exists before creating transactions
+**Subscription transactions not creating**
+- Solution: Ensure subscription due date is today or earlier, and app has been opened today
 
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Acknowledgments
-
-- Flutter team for the amazing framework
-- FL Chart for beautiful chart components
-- SQLite for robust local storage
-
-## Contact
-
-For questions, issues, or suggestions, please open an issue on GitHub.
+**Input field accepts non-numeric characters**
+- Solution: All numeric input fields use `FilteringTextInputFormatter.allow(RegExp(r'[0-9.]'))`
 
 ---
 
-**Version:** 1.0.0+1
+## 📄 License
 
-**Last Updated:** 2025
+MIT License - See LICENSE file for details
 
-**Maintained by:** [Your Name]
+---
+
+## 👨‍💻 Author
+
+**Developed by:** 준상 (Junsang Yoo)
+
+---
+
+## 📞 Support
+
+For issues, questions, or suggestions, please open an issue on GitHub.
+
+---
+
+**Version:** 2.0.0
+
+**Last Updated:** January 2025
+
+**Platforms:** iOS | Android | macOS | Windows | Linux

@@ -427,4 +427,20 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get all => 'All';
+
+  @override
+  String get subscriptionFrequencyMonthly => 'Monthly';
+
+  @override
+  String get subscriptionFrequencyYearly => 'Yearly';
+
+  @override
+  String get subscriptionFrequencyCustom => 'Custom';
+
+  @override
+  String get subscriptionCustomInterval => 'Every (months)';
+
+  @override
+  String get subscriptionInfoMessage =>
+      'To manage subscription payments, please use Settings → Subscriptions';
 }

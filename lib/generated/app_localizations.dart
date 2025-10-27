@@ -907,6 +907,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'All'**
   String get all;
+
+  /// No description provided for @subscriptionFrequencyMonthly.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly'**
+  String get subscriptionFrequencyMonthly;
+
+  /// No description provided for @subscriptionFrequencyYearly.
+  ///
+  /// In en, this message translates to:
+  /// **'Yearly'**
+  String get subscriptionFrequencyYearly;
+
+  /// No description provided for @subscriptionFrequencyCustom.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom'**
+  String get subscriptionFrequencyCustom;
+
+  /// No description provided for @subscriptionCustomInterval.
+  ///
+  /// In en, this message translates to:
+  /// **'Every (months)'**
+  String get subscriptionCustomInterval;
+
+  /// No description provided for @subscriptionInfoMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'To manage subscription payments, please use Settings → Subscriptions'**
+  String get subscriptionInfoMessage;
 }
 
 class _AppLocalizationsDelegate

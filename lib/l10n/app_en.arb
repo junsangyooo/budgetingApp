@@ -166,6 +166,7 @@
   "categoryName": "Category Name",
   "newAccountTitle": "New Account",
   "addNewAccount": "Add New Account",
+  "initialBalance": "Initial Balance",
   "deleteAccount": "Delete Account",
   "deleteAccountConfirm": "Are you sure you want to delete account \"{name}\"? All associated transactions will be deleted.",
   "@deleteAccountConfirm": {
@@ -189,5 +190,10 @@
   "selectCategories": "Select Categories",
   "selectAccountOrCurrencyForChart": "Select Account or Currency",
   "noData": "No data available",
-  "all": "All"
+  "all": "All",
+  "subscriptionFrequencyMonthly": "Monthly",
+  "subscriptionFrequencyYearly": "Yearly",
+  "subscriptionFrequencyCustom": "Custom",
+  "subscriptionCustomInterval": "Every (months)",
+  "subscriptionInfoMessage": "To manage subscription payments, please use Settings → Subscriptions"
 }
